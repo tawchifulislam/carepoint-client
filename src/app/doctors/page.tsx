@@ -1,6 +1,32 @@
 import Link from 'next/link';
 import { Container } from '@/components/container';
 import { publicApiFetch } from '@/lib/api-server';
+import type { Metadata } from 'next';
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; specialty?: string }>;
+}): Promise<Metadata> {
+  const params = await searchParams;
+
+  if (params.specialty) {
+    return {
+      title: `${params.specialty} Doctors | CarePoint`,
+      description: `Find and book ${params.specialty} specialists near you.`,
+    };
+  }
+
+  if (params.search) {
+    return { title: `Search results for "${params.search}" | CarePoint` };
+  }
+
+  return {
+    title: 'Find a Doctor | CarePoint',
+    description:
+      'Search verified doctors by specialty and book a real-time appointment.',
+  };
+}
 
 const SPECIALTIES = [
   'Cardiology',

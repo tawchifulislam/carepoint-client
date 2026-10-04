@@ -2,7 +2,25 @@ import { notFound } from 'next/navigation';
 import { Container } from '@/components/container';
 import { publicApiFetch } from '@/lib/api-server';
 import { SlotPicker } from './slot-picker';
+import type { Metadata } from 'next';
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+
+  try {
+    const doctor = await publicApiFetch<Doctor>(`/api/doctors/${id}`, 300);
+    return {
+      title: `${doctor.name} - ${doctor.specialty} | CarePoint`,
+      description: `Book an appointment with ${doctor.name}, ${doctor.specialty} at ${doctor.clinic.name}.`,
+    };
+  } catch {
+    return { title: 'Doctor not found | CarePoint' };
+  }
+}
 interface Doctor {
   id: string;
   name: string;
