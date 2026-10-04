@@ -1,11 +1,23 @@
 'use client';
 
 import Link from 'next/link';
-import { useSession, signOut } from '@/lib/auth-client';
+import { signOut } from '@/lib/auth-client';
+import { useMe } from '@/lib/use-me';
 import { Container } from './container';
 
+const DASHBOARD_PATHS: Record<string, string> = {
+  PATIENT: '/dashboard',
+  DOCTOR: '/doctor-portal',
+  CLINIC_ADMIN: '/clinic-admin',
+  SUPER_ADMIN: '/super-admin',
+};
+
 export function Header() {
-  const { data: session } = useSession();
+  const { me, loading } = useMe();
+
+  const dashboardHref = me
+    ? (DASHBOARD_PATHS[me.role] ?? '/dashboard')
+    : '/dashboard';
 
   return (
     <header className="border-b border-border bg-surface">
@@ -24,10 +36,10 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          {session ? (
+          {loading ? null : me ? (
             <>
               <Link
-                href="/dashboard"
+                href={dashboardHref}
                 className="rounded-sm px-3 py-2 text-sm font-medium text-ink hover:bg-paper"
               >
                 Dashboard
