@@ -97,7 +97,7 @@ function DoctorApplyForm() {
         <input
           type="number"
           step="0.01"
-          {...register('consultationFee')}
+          {...register('consultationFee', { valueAsNumber: true })}
           className="mt-1 w-full rounded-sm border border-border bg-surface px-3 py-2 text-sm text-ink"
         />
         {errors.consultationFee && (
