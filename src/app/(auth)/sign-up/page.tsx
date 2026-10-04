@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { authClient } from '@/lib/auth-client';
 import { signUpSchema, type SignUpInput } from '@/lib/validators/auth.schema';
+import { GoogleSignInButton } from '@/components/google-sign-in-button';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -33,55 +34,62 @@ export default function SignUpPage() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto mt-16 max-w-sm space-y-4"
-    >
+    <div className="mx-auto mt-16 max-w-sm">
       <h1 className="text-xl font-semibold">Create an account</h1>
 
-      <div>
-        <input
-          {...register('name')}
-          placeholder="Name"
-          className="w-full rounded border px-3 py-2"
-        />
-        {errors.name && (
-          <p className="text-sm text-red-600">{errors.name.message}</p>
-        )}
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+        <div>
+          <input
+            {...register('name')}
+            placeholder="Name"
+            className="w-full rounded border px-3 py-2"
+          />
+          {errors.name && (
+            <p className="text-sm text-red-600">{errors.name.message}</p>
+          )}
+        </div>
+
+        <div>
+          <input
+            {...register('email')}
+            placeholder="Email"
+            className="w-full rounded border px-3 py-2"
+          />
+          {errors.email && (
+            <p className="text-sm text-red-600">{errors.email.message}</p>
+          )}
+        </div>
+
+        <div>
+          <input
+            {...register('password')}
+            type="password"
+            placeholder="Password"
+            className="w-full rounded border px-3 py-2"
+          />
+          {errors.password && (
+            <p className="text-sm text-red-600">{errors.password.message}</p>
+          )}
+        </div>
+
+        {serverError && <p className="text-sm text-red-600">{serverError}</p>}
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full rounded bg-black px-3 py-2 text-white disabled:opacity-50"
+        >
+          {isSubmitting ? 'Creating account...' : 'Sign up'}
+        </button>
+      </form>
+
+      <div className="my-4 flex items-center gap-3">
+        <div className="h-px flex-1 bg-gray-200" />
+        <span className="text-xs text-gray-400">or</span>
+        <div className="h-px flex-1 bg-gray-200" />
       </div>
 
-      <div>
-        <input
-          {...register('email')}
-          placeholder="Email"
-          className="w-full rounded border px-3 py-2"
-        />
-        {errors.email && (
-          <p className="text-sm text-red-600">{errors.email.message}</p>
-        )}
-      </div>
-
-      <div>
-        <input
-          {...register('password')}
-          type="password"
-          placeholder="Password"
-          className="w-full rounded border px-3 py-2"
-        />
-        {errors.password && (
-          <p className="text-sm text-red-600">{errors.password.message}</p>
-        )}
-      </div>
-
-      {serverError && <p className="text-sm text-red-600">{serverError}</p>}
-
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full rounded bg-black px-3 py-2 text-white disabled:opacity-50"
-      >
-        {isSubmitting ? 'Creating account...' : 'Sign up'}
-      </button>
-    </form>
+      <GoogleSignInButton />
+    </div>
   );
 }
