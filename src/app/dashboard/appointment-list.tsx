@@ -121,13 +121,23 @@ export function AppointmentList() {
               </div>
 
               {canCancel && (
-                <button
-                  onClick={() => cancelAppointment(appointment.id)}
-                  disabled={actioningId === appointment.id}
-                  className="shrink-0 rounded-sm border border-border px-4 py-2 text-sm font-medium text-ink hover:bg-paper disabled:opacity-50"
-                >
-                  {actioningId === appointment.id ? 'Cancelling...' : 'Cancel'}
-                </button>
+                <div className="flex shrink-0 gap-2">
+                  <Link
+                    href={`/appointments/${appointment.id}/reschedule`}
+                    className="rounded-sm border border-border px-4 py-2 text-sm font-medium text-ink hover:bg-paper"
+                  >
+                    Reschedule
+                  </Link>
+                  <button
+                    onClick={() => cancelAppointment(appointment.id)}
+                    disabled={actioningId === appointment.id}
+                    className="rounded-sm border border-border px-4 py-2 text-sm font-medium text-ink hover:bg-paper disabled:opacity-50"
+                  >
+                    {actioningId === appointment.id
+                      ? 'Cancelling...'
+                      : 'Cancel'}
+                  </button>
+                </div>
               )}
             </div>
           );
