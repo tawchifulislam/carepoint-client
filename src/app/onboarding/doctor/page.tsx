@@ -12,17 +12,13 @@ import {
   createDoctorSchema,
   type CreateDoctorInput,
 } from '@/lib/validators/doctor.schema';
+import type { ClinicSummary } from '@/types/clinic';
 
 type DoctorFormValues = z.input<typeof createDoctorSchema>;
 
-interface Clinic {
-  id: string;
-  name: string;
-}
-
 function DoctorApplyForm() {
   const router = useRouter();
-  const [clinics, setClinics] = useState<Clinic[]>([]);
+  const [clinics, setClinics] = useState<ClinicSummary[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {

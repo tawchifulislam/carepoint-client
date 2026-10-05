@@ -12,11 +12,8 @@ import {
 } from 'recharts';
 import { apiFetch } from '@/lib/api';
 import { MetricCard } from '@/components/metric-card';
+import type { ClinicSummary } from '@/types/clinic';
 
-interface Clinic {
-  id: string;
-  name: string;
-}
 
 interface DashboardDoctor {
   doctorId: string;
@@ -46,7 +43,7 @@ export default function ClinicOverviewPage() {
         return;
       }
 
-      const clinic: Clinic = await clinicResponse.json();
+      const clinic: ClinicSummary = await clinicResponse.json();
       const dashboardResponse = await apiFetch(
         `/api/clinics/${clinic.id}/dashboard`,
       );
