@@ -3,7 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { ProtectedRoute } from './protected-route';
-import { useMe } from '@/lib/use-me';
+import { useMe, type MeResponse } from '@/lib/use-me';
+
+const APPROVAL_FIELD: Partial<Record<string, keyof MeResponse>> = {
+  DOCTOR: 'doctor',
+  CLINIC_ADMIN: 'adminOfClinic',
+};
 
 export function RequireRole({
   role,
@@ -15,15 +20,31 @@ export function RequireRole({
   const { me, loading } = useMe();
   const router = useRouter();
 
+  const approvalField = APPROVAL_FIELD[role];
+  const approvalEntity = approvalField
+    ? (me?.[approvalField] as { approvalStatus: string } | null)
+    : null;
+  const isApproved =
+    !approvalField || approvalEntity?.approvalStatus === 'APPROVED';
+
   useEffect(() => {
-    if (!loading && me && me.role !== role) {
+    if (loading || !me) return;
+
+    if (me.role !== role) {
       router.replace('/');
+      return;
     }
-  }, [loading, me, role, router]);
+
+    if (!isApproved) {
+      router.replace('/onboarding/pending');
+    }
+  }, [loading, me, role, isApproved, router]);
+
+  const ready = !loading && !!me && me.role === role && isApproved;
 
   return (
     <ProtectedRoute>
-      {loading || !me || me.role !== role ? (
+      {!ready ? (
         <p className="py-16 text-center text-ink-muted">Loading...</p>
       ) : (
         children
