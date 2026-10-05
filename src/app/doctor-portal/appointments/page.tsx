@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { apiFetch } from '@/lib/api';
 import { formatDayLabel, formatSlotTime } from '@/lib/format';
 import { StatusBadge } from '@/components/status-badge';
+import type { Paginated } from '@/types/pagination';
 
 interface DoctorAppointment {
   id: string;
@@ -13,16 +14,12 @@ interface DoctorAppointment {
   patient: { name: string };
 }
 
-interface AppointmentPage {
-  data: DoctorAppointment[];
-  page: number;
-  totalPages: number;
-}
-
 const PAGE_SIZE = 10;
 
 export default function DoctorAppointmentsPage() {
-  const [result, setResult] = useState<AppointmentPage | null>(null);
+  const [result, setResult] = useState<Paginated<DoctorAppointment> | null>(
+    null,
+  );
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState('');
   const [actioningId, setActioningId] = useState<string | null>(null);

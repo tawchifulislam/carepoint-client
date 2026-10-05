@@ -3,18 +3,12 @@
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/lib/api';
 import { StatusBadge } from '@/components/status-badge';
+import type { PendingDoctor } from '@/types/doctor';
 
 interface RosterDoctor {
   id: string;
   specialty: string;
   approvalStatus: string;
-  consultationFee: number;
-  user: { name: string; email: string };
-}
-
-interface PendingDoctor {
-  id: string;
-  specialty: string;
   consultationFee: number;
   user: { name: string; email: string };
 }

@@ -5,11 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from '@/lib/auth-client';
 import { apiFetch } from '@/lib/api';
 import { formatDayLabel, formatSlotTime } from '@/lib/format';
-
-interface DaySlots {
-  date: string;
-  slots: { start: string; end: string }[];
-}
+import type { DaySlots } from '@/types/availability';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

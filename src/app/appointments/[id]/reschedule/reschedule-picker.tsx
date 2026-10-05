@@ -4,11 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiFetch } from '@/lib/api';
 import { formatDayLabel, formatSlotTime } from '@/lib/format';
-
-interface DaySlots {
-  date: string;
-  slots: { start: string; end: string }[];
-}
+import type { DaySlots } from '@/types/availability';
 
 interface AppointmentDetail {
   id: string;

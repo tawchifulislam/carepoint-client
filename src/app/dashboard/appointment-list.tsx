@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { apiFetch } from '@/lib/api';
 import { formatDayLabel, formatSlotTime } from '@/lib/format';
 import { StatusBadge } from '@/components/status-badge';
+import type { Paginated } from '@/types/pagination';
 
 interface Appointment {
   id: string;
@@ -17,17 +18,11 @@ interface Appointment {
   };
 }
 
-interface AppointmentPage {
-  data: Appointment[];
-  page: number;
-  totalPages: number;
-}
-
 const PAGE_SIZE = 10;
 const CANCELLATION_CUTOFF_MS = 2 * 60 * 60 * 1000;
 
 export function AppointmentList() {
-  const [result, setResult] = useState<AppointmentPage | null>(null);
+  const [result, setResult] = useState<Paginated<Appointment> | null>(null);
   const [page, setPage] = useState(1);
   const [actioningId, setActioningId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +31,7 @@ export function AppointmentList() {
     const response = await apiFetch(
       `/api/appointments/me?page=${targetPage}&pageSize=${PAGE_SIZE}`,
     );
-    const data: AppointmentPage = await response.json();
+    const data: Paginated<Appointment> = await response.json();
     setResult(data);
   }, []);
 

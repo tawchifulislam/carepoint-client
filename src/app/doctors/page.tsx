@@ -1,7 +1,31 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Container } from '@/components/container';
 import { publicApiFetch } from '@/lib/api-server';
-import type { Metadata } from 'next';
+import type { Paginated } from '@/types/pagination';
+
+const SPECIALTIES = [
+  'Cardiology',
+  'Dermatology',
+  'Pediatrics',
+  'Orthopedics',
+  'Neurology',
+  'Psychiatry',
+  'Gynecology',
+  'Dentistry',
+  'ENT',
+  'Ophthalmology',
+  'Urology',
+  'General Medicine',
+];
+
+interface DoctorListItem {
+  id: string;
+  name: string;
+  specialty: string;
+  consultationFee: number;
+  clinic: { id: string; name: string; address: string };
+}
 
 export async function generateMetadata({
   searchParams,
@@ -28,36 +52,6 @@ export async function generateMetadata({
   };
 }
 
-const SPECIALTIES = [
-  'Cardiology',
-  'Dermatology',
-  'Pediatrics',
-  'Orthopedics',
-  'Neurology',
-  'Psychiatry',
-  'Gynecology',
-  'Dentistry',
-  'ENT',
-  'Ophthalmology',
-  'Urology',
-  'General Medicine',
-];
-
-interface DoctorListItem {
-  id: string;
-  name: string;
-  specialty: string;
-  consultationFee: number;
-  clinic: { id: string; name: string; address: string };
-}
-
-interface DoctorListResponse {
-  data: DoctorListItem[];
-  page: number;
-  totalPages: number;
-  total: number;
-}
-
 export default async function DoctorsPage({
   searchParams,
 }: {
@@ -73,7 +67,7 @@ export default async function DoctorsPage({
   if (specialty) query.set('specialty', specialty);
   query.set('page', page);
 
-  const result = await publicApiFetch<DoctorListResponse>(
+  const result = await publicApiFetch<Paginated<DoctorListItem>>(
     `/api/doctors?${query.toString()}`,
   );
 

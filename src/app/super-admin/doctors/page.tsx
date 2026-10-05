@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/lib/api';
-
-interface PendingDoctor {
-  id: string;
-  specialty: string;
-  consultationFee: number;
-  user: { name: string; email: string };
-  clinic: { id: string; name: string };
-}
+import type { PendingDoctor } from '@/types/doctor';
 
 export default function PendingDoctorsPage() {
   const [doctors, setDoctors] = useState<PendingDoctor[]>([]);
