@@ -2,34 +2,84 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSession } from '@/lib/auth-client';
 import { apiFetch } from '@/lib/api';
-import { formatDayLabel, formatSlotTime } from '@/lib/format';
-import type { DaySlots } from '@/types/availability';
+import {
+  chipDateLabel,
+  formatDayLabel,
+  formatSlotTime,
+  getDhakaHour,
+} from '@/lib/format';
+
+interface Slot {
+  start: string;
+  end: string;
+}
+
+interface DaySlots {
+  date: string;
+  slots: Slot[];
+}
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-function dateKeyFromOffset(days: number): string {
-  return new Date(Date.now() + days * 24 * 60 * 60 * 1000)
-    .toISOString()
-    .slice(0, 10);
+function todayKey(): string {
+  return new Date().toISOString().slice(0, 10);
 }
 
-export function SlotPicker({ doctorId }: { doctorId: string }) {
-  const { data: session, isPending } = useSession();
+function addDaysToKey(dateKey: string, amount: number): string {
+  const d = new Date(`${dateKey}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + amount);
+  return d.toISOString().slice(0, 10);
+}
+
+function groupByPeriod(slots: Slot[]) {
+  const morning: Slot[] = [];
+  const afternoon: Slot[] = [];
+  const evening: Slot[] = [];
+
+  for (const slot of slots) {
+    const hour = getDhakaHour(slot.start);
+    if (hour < 12) morning.push(slot);
+    else if (hour < 17) afternoon.push(slot);
+    else evening.push(slot);
+  }
+
+  return [
+    { label: 'Morning', slots: morning },
+    { label: 'Afternoon', slots: afternoon },
+    { label: 'Evening', slots: evening },
+  ].filter(group => group.slots.length > 0);
+}
+
+export function SlotPicker({
+  doctorId,
+  consultationFee,
+}: {
+  doctorId: string;
+  consultationFee: number;
+}) {
+  const { data: session } = useSession();
   const router = useRouter();
 
+  const [windowStart, setWindowStart] = useState(todayKey());
   const [days, setDays] = useState<DaySlots[]>([]);
-  const [selectedDay, setSelectedDay] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [booking, setBooking] = useState<string | null>(null);
+  const [activeDateIndex, setActiveDateIndex] = useState(0);
+  const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const from = dateKeyFromOffset(1);
-      const to = dateKeyFromOffset(7);
+      setSelectedSlot(null);
+      setActiveDateIndex(0);
+
+      const from = windowStart;
+      const to = addDaysToKey(windowStart, 6);
       const response = await fetch(
         `${API_URL}/api/doctors/${doctorId}/availability?from=${from}&to=${to}`,
       );
@@ -39,87 +89,252 @@ export function SlotPicker({ doctorId }: { doctorId: string }) {
     }
 
     load();
-  }, [doctorId]);
+  }, [doctorId, windowStart]);
 
-  async function bookSlot(slotStart: string) {
+  async function confirmBooking() {
+    if (!selectedSlot) return;
+
     setError(null);
-
-    if (isPending) return;
 
     if (!session) {
       router.push('/sign-in');
       return;
     }
 
-    setBooking(slotStart);
+    setConfirming(true);
 
     try {
       const response = await apiFetch('/api/appointments', {
         method: 'POST',
-        body: JSON.stringify({ doctorId, slotStart }),
+        body: JSON.stringify({ doctorId, slotStart: selectedSlot.start }),
       });
       const data = await response.json();
 
       if (!response.ok) {
         setError(data.error ?? 'This slot is no longer available.');
-        setBooking(null);
+        setConfirming(false);
+        setSelectedSlot(null);
+        setSheetOpen(false);
+        const from = windowStart;
+        const to = addDaysToKey(windowStart, 6);
+        const refreshed = await fetch(
+          `${API_URL}/api/doctors/${doctorId}/availability?from=${from}&to=${to}`,
+        );
+        setDays(await refreshed.json());
         return;
       }
 
       window.location.href = data.checkoutUrl;
     } catch {
       setError('Something went wrong. Please try again.');
-      setBooking(null);
+      setConfirming(false);
     }
   }
 
   if (loading) {
     return (
-      <div className="mt-6 grid grid-cols-7 gap-2">
-        {Array.from({ length: 7 }, (_, i) => (
-          <div key={i} className="h-16 animate-pulse rounded-sm bg-border" />
-        ))}
+      <div className="mt-6 space-y-3">
+        <div className="h-12 animate-pulse rounded-md bg-border" />
+        <div className="h-24 animate-pulse rounded-md bg-border" />
       </div>
     );
   }
 
-  const activeDay = days[selectedDay];
+  const activeDay = days[activeDateIndex];
+  const periods = activeDay ? groupByPeriod(activeDay.slots) : [];
+  const today = todayKey();
 
   return (
-    <div className="mt-6">
-      <div className="flex gap-2 overflow-x-auto pb-2">
-        {days.map((day, i) => (
+    <div className="grid gap-10 md:grid-cols-[1fr_320px]">
+      <div>
+        <h3 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">
+          Choose a date
+        </h3>
+
+        <div className="mt-3 flex items-center gap-2">
           <button
-            key={day.date}
-            onClick={() => setSelectedDay(i)}
-            className={`shrink-0 rounded-sm border px-4 py-2 text-sm font-mono ${
-              i === selectedDay
-                ? 'border-primary bg-primary-tint text-primary'
-                : 'border-border text-ink hover:bg-paper'
-            }`}
+            onClick={() => setWindowStart(w => addDaysToKey(w, -7))}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border text-ink-muted hover:border-primary hover:text-primary"
+            aria-label="Previous week"
           >
-            {formatDayLabel(day.date)}
+            <ChevronLeft className="h-4 w-4" />
           </button>
-        ))}
+
+          <div className="flex flex-1 gap-2 overflow-hidden">
+            {days.map((day, i) => {
+              const label = chipDateLabel(day.date, today);
+              return (
+                <button
+                  key={day.date}
+                  onClick={() => setActiveDateIndex(i)}
+                  className={`flex-1 rounded-md border px-1 py-2 text-center transition-colors ${
+                    i === activeDateIndex
+                      ? 'border-primary bg-primary-tint text-primary-hover'
+                      : 'border-border bg-surface text-ink hover:border-primary'
+                  }`}
+                >
+                  <div className="text-[11px] text-ink-muted">{label.top}</div>
+                  <div className="mt-0.5 font-mono text-sm font-semibold">
+                    {label.bottom}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={() => setWindowStart(w => addDaysToKey(w, 7))}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border text-ink-muted hover:border-primary hover:text-primary"
+            aria-label="Next week"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+
+          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border text-ink-muted hover:border-primary hover:text-primary">
+            <Calendar className="h-4 w-4" />
+            <input
+              type="date"
+              min={today}
+              onChange={e => {
+                if (e.target.value) setWindowStart(e.target.value);
+              }}
+              className="absolute inset-0 cursor-pointer opacity-0"
+              aria-label="Jump to date"
+            />
+          </div>
+        </div>
+
+        <div className="mt-8 space-y-6">
+          {periods.length === 0 && (
+            <p className="text-sm text-ink-muted">No open slots this day.</p>
+          )}
+
+          {periods.map(period => (
+            <div key={period.label}>
+              <div className="mb-2 text-sm text-ink-muted">{period.label}</div>
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                {period.slots.map(slot => (
+                  <button
+                    key={slot.start}
+                    onClick={() => {
+                      setSelectedSlot(slot);
+                      setError(null);
+                    }}
+                    className={`rounded-md border px-2 py-2.5 font-mono text-sm font-medium transition-colors ${
+                      selectedSlot?.start === slot.start
+                        ? 'border-primary bg-primary text-white'
+                        : 'border-border bg-surface text-ink hover:border-primary'
+                    }`}
+                  >
+                    {formatSlotTime(slot.start)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {error && <p className="mt-4 text-sm text-red">{error}</p>}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        {activeDay?.slots.length === 0 && (
-          <p className="text-sm text-ink-muted">No open slots this day.</p>
+      <div className="sticky top-6 hidden h-fit rounded-lg border border-border bg-surface p-6 md:block">
+        <h3 className="font-display text-sm font-semibold text-ink">
+          Your appointment
+        </h3>
+        {!selectedSlot ? (
+          <p className="mt-3 text-sm text-ink-muted">
+            Select a time to continue.
+          </p>
+        ) : (
+          <div className="mt-4">
+            <SummaryRows
+              date={formatDayLabel(activeDay?.date ?? today)}
+              time={formatSlotTime(selectedSlot.start)}
+              fee={consultationFee}
+            />
+            <button
+              onClick={confirmBooking}
+              disabled={confirming}
+              className="mt-4 w-full rounded-sm bg-primary px-4 py-3 text-sm font-semibold text-white hover:bg-primary-hover disabled:opacity-50"
+            >
+              {confirming ? 'Processing...' : 'Confirm & Pay'}
+            </button>
+          </div>
         )}
-        {activeDay?.slots.map(slot => (
-          <button
-            key={slot.start}
-            onClick={() => bookSlot(slot.start)}
-            disabled={booking !== null}
-            className="rounded-sm bg-primary-tint px-4 py-2 font-mono text-sm text-primary hover:bg-primary hover:text-white disabled:opacity-50"
-          >
-            {booking === slot.start ? '...' : formatSlotTime(slot.start)}
-          </button>
-        ))}
       </div>
 
-      {error && <p className="mt-3 text-sm text-red">{error}</p>}
+      {selectedSlot && (
+        <button
+          onClick={() => setSheetOpen(true)}
+          className="fixed inset-x-4 bottom-4 z-30 flex items-center justify-between rounded-lg bg-primary px-5 py-3.5 text-white shadow-card md:hidden"
+        >
+          <span className="text-sm">
+            Selected &middot;{' '}
+            <span className="font-mono font-semibold">
+              {formatSlotTime(selectedSlot.start)}
+            </span>
+          </span>
+          <span className="rounded-sm bg-white/20 px-3 py-1.5 text-xs font-semibold">
+            Review &amp; Pay
+          </span>
+        </button>
+      )}
+
+      {sheetOpen && selectedSlot && (
+        <>
+          <div
+            onClick={() => setSheetOpen(false)}
+            className="fixed inset-0 z-40 bg-ink/40 md:hidden"
+          />
+          <div className="fixed inset-x-0 bottom-0 z-50 rounded-t-xl bg-surface p-6 pb-[calc(env(safe-area-inset-bottom,0px)+24px)] md:hidden">
+            <div className="mx-auto mb-4 h-1 w-9 rounded-full bg-border" />
+            <h3 className="font-display text-base font-semibold text-ink">
+              Confirm your appointment
+            </h3>
+            <div className="mt-4">
+              <SummaryRows
+                date={formatDayLabel(activeDay?.date ?? today)}
+                time={formatSlotTime(selectedSlot.start)}
+                fee={consultationFee}
+              />
+            </div>
+            <button
+              onClick={confirmBooking}
+              disabled={confirming}
+              className="mt-4 w-full rounded-sm bg-primary px-4 py-3 text-sm font-semibold text-white hover:bg-primary-hover disabled:opacity-50"
+            >
+              {confirming ? 'Processing...' : 'Confirm & Pay'}
+            </button>
+          </div>
+        </>
+      )}
     </div>
+  );
+}
+
+function SummaryRows({
+  date,
+  time,
+  fee,
+}: {
+  date: string;
+  time: string;
+  fee: number;
+}) {
+  return (
+    <dl className="space-y-2 text-sm">
+      <div className="flex justify-between border-b border-border pb-2">
+        <dt className="text-ink-muted">Date</dt>
+        <dd className="font-medium text-ink">{date}</dd>
+      </div>
+      <div className="flex justify-between border-b border-border pb-2">
+        <dt className="text-ink-muted">Time</dt>
+        <dd className="font-mono font-medium text-ink">{time}</dd>
+      </div>
+      <div className="flex justify-between">
+        <dt className="text-ink-muted">Price</dt>
+        <dd className="font-mono font-medium text-ink">${fee}</dd>
+      </div>
+    </dl>
   );
 }

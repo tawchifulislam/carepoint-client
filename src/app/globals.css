@@ -3,28 +3,29 @@
 @import "shadcn/tailwind.css";
 
 @theme {
-  --color-paper: #F5F6F4;
+  --color-paper: #F6F8F9;
   --color-surface: #FFFFFF;
-  --color-ink: #12181F;
-  --color-ink-muted: #5B6B79;
-  --color-border: #DADFDB;
-  --color-primary: #0E6E55;
-  --color-primary-hover: #0B5A46;
-  --color-primary-tint: #E3F2EE;
-  --color-amber: #C98A2C;
-  --color-amber-tint: #FBF0DD;
+  --color-ink: #121D28;
+  --color-ink-muted: #5E6F7A;
+  --color-border: #E2E8EB;
+  --color-primary: #0C7489;
+  --color-primary-hover: #084F5C;
+  --color-primary-tint: #E3F2F4;
+  --color-amber: #B8862F;
+  --color-amber-tint: #FBF2E2;
   --color-red: #B4472E;
   --color-red-tint: #F8E7E2;
 
   --font-sans: var(--font-geist-sans);
-  --font-display: var(--font-bricolage);
+  --font-display: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 20px;
 
-  --shadow-card: 0 2px 0 0 rgb(18 24 31 / 0.06), 0 1px 2px rgb(18 24 31 / 0.04);
+  --shadow-card: 0 1px 2px rgb(18 29 40 / 0.04), 0 8px 24px rgb(18 29 40 / 0.05);
 }
 
 :root {
