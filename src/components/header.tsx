@@ -6,6 +6,7 @@ import { Menu, X } from 'lucide-react';
 import { signOut } from '@/lib/auth-client';
 import { useMe } from '@/lib/use-me';
 import { Container } from './container';
+import { Logo } from './logo';
 
 const DASHBOARD_PATHS: Record<string, string> = {
   PATIENT: '/dashboard',
@@ -25,8 +26,8 @@ export function Header() {
   return (
     <header className="border-b border-border bg-surface">
       <Container className="flex h-16 items-center justify-between">
-        <Link href="/" className="font-display text-xl font-semibold text-ink">
-          CarePoint
+        <Link href="/">
+          <Logo />
         </Link>
 
         <nav className="hidden items-center gap-6 text-sm text-ink-muted md:flex">
