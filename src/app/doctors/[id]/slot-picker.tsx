@@ -237,7 +237,7 @@ export function SlotPicker({
         {error && <p className="mt-4 text-sm text-red">{error}</p>}
       </div>
 
-      <div className="sticky top-6 hidden h-fit rounded-lg border border-border bg-surface p-6 md:block">
+      <div className="sticky top-24 hidden h-fit rounded-lg border border-border bg-surface p-6 md:block">
         <h3 className="font-display text-sm font-semibold text-ink">
           Your appointment
         </h3>
