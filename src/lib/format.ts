@@ -47,3 +47,38 @@ export function getDhakaHour(iso: string): number {
 
   return parseInt(hourStr, 10) % 24;
 }
+
+function dhakaDateKey(date: Date): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: CLINIC_TIMEZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+}
+
+export function formatNextAvailable(
+  iso: string,
+  now: Date = new Date(),
+): string {
+  const slot = new Date(iso);
+  const slotKey = dhakaDateKey(slot);
+  const time = formatSlotTime(iso);
+
+  if (slotKey === dhakaDateKey(now)) {
+    return `Today, ${time}`;
+  }
+
+  if (slotKey === dhakaDateKey(new Date(now.getTime() + 24 * 60 * 60 * 1000))) {
+    return `Tomorrow, ${time}`;
+  }
+
+  const day = new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone: CLINIC_TIMEZONE,
+  }).format(slot);
+
+  return `${day}, ${time}`;
+}
