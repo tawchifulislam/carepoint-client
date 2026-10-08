@@ -8,6 +8,15 @@ export function formatSlotTime(iso: string): string {
   }).format(new Date(iso));
 }
 
+export function formatSlotDate(iso: string): string {
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone: CLINIC_TIMEZONE,
+  }).format(new Date(iso));
+}
+
 export function formatDayLabel(dateKey: string): string {
   return new Intl.DateTimeFormat('en-US', {
     weekday: 'short',
@@ -73,12 +82,29 @@ export function formatNextAvailable(
     return `Tomorrow, ${time}`;
   }
 
-  const day = new Intl.DateTimeFormat('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    timeZone: CLINIC_TIMEZONE,
-  }).format(slot);
+  return `${formatSlotDate(iso)}, ${time}`;
+}
 
-  return `${day}, ${time}`;
+export function formatTimeUntil(iso: string, nowMs: number): string {
+  const diffMs = new Date(iso).getTime() - nowMs;
+
+  if (diffMs <= 0) {
+    return 'Starting now';
+  }
+
+  const totalMinutes = Math.max(1, Math.ceil(diffMs / 60_000));
+
+  if (totalMinutes < 60) {
+    return `In ${totalMinutes} min`;
+  }
+
+  const hours = Math.floor(totalMinutes / 60);
+
+  if (hours < 24) {
+    const minutes = totalMinutes % 60;
+    return minutes === 0 ? `In ${hours} hr` : `In ${hours} hr ${minutes} min`;
+  }
+
+  const days = Math.floor(hours / 24);
+  return `In ${days} ${days === 1 ? 'day' : 'days'}`;
 }
