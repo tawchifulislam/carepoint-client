@@ -1,20 +1,20 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 @theme {
-  --color-paper: #F6F8F9;
-  --color-surface: #FFFFFF;
-  --color-ink: #121D28;
-  --color-ink-muted: #5E6F7A;
-  --color-border: #E2E8EB;
-  --color-primary: #0C7489;
-  --color-primary-hover: #084F5C;
-  --color-primary-tint: #E3F2F4;
-  --color-amber: #B8862F;
-  --color-amber-tint: #FBF2E2;
-  --color-red: #B4472E;
-  --color-red-tint: #F8E7E2;
+  --color-paper: #f6f8f9;
+  --color-surface: #ffffff;
+  --color-ink: #121d28;
+  --color-ink-muted: #5e6f7a;
+  --color-border: #e2e8eb;
+  --color-primary: #0c7489;
+  --color-primary-hover: #084f5c;
+  --color-primary-tint: #e3f2f4;
+  --color-amber: #b8862f;
+  --color-amber-tint: #fbf2e2;
+  --color-red: #b4472e;
+  --color-red-tint: #f8e7e2;
 
   --font-sans: var(--font-geist-sans);
   --font-display: var(--font-geist-sans);
@@ -25,11 +25,13 @@
   --radius-lg: 18px;
   --radius-xl: 20px;
 
-  --shadow-card: 0 1px 2px rgb(18 29 40 / 0.04), 0 8px 24px rgb(18 29 40 / 0.05);
+  --shadow-card:
+    0 1px 2px rgb(18 29 40 / 0.04), 0 8px 24px rgb(18 29 40 / 0.05);
 
   --animate-rise: rise 700ms ease forwards;
   --animate-marquee: marquee 40s linear infinite;
   --animate-pulse-soft: pulse-soft 1.8s ease-in-out infinite;
+  --animate-pop: pop 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
 
   @keyframes rise {
     from {
@@ -58,6 +60,17 @@
     }
     50% {
       opacity: 0.35;
+    }
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 }

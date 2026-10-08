@@ -17,3 +17,18 @@ export interface PatientAppointment {
     clinic: { name: string; address: string };
   };
 }
+
+export interface AppointmentDetail {
+  id: string;
+  doctorId: string;
+  status: AppointmentStatus;
+  slotStart: string;
+  slotEnd: string;
+  holdExpiresAt: string | null;
+  patient: { name: string };
+  doctor: {
+    specialty: string;
+    user: { name: string };
+    clinic: { name: string; address: string };
+  };
+}
