@@ -11,7 +11,9 @@ import type { AppointmentDetail } from '@/types/appointment';
 import { AppointmentSummary } from './appointment-summary';
 
 const POLL_INTERVAL_MS = 2000;
-const MAX_POLL_ATTEMPTS = 30;
+const MAX_WAIT_MS = 45_000;
+const SYNC_AFTER_MS = 6_000;
+const SYNC_INTERVAL_MS = 4_000;
 const CONFIRMING_STEPS = [
   'Payment submitted',
   'Confirming with the clinic',
@@ -74,8 +76,27 @@ export function AppointmentStatus({
     let cancelled = false;
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
-    async function poll(attempt: number) {
+    const startedAt = Date.now();
+    const syncAfterMs = pollKey > 0 ? 0 : SYNC_AFTER_MS;
+    let lastSyncAt = 0;
+
+    async function poll() {
       try {
+        const now = Date.now();
+
+        if (
+          justPaid &&
+          now - startedAt >= syncAfterMs &&
+          now - lastSyncAt >= SYNC_INTERVAL_MS
+        ) {
+          lastSyncAt = now;
+          await apiFetch(`/api/appointments/${appointmentId}/sync-payment`, {
+            method: 'POST',
+          }).catch(() => undefined);
+
+          if (cancelled) return;
+        }
+
         const response = await apiFetch(`/api/appointments/${appointmentId}`);
 
         if (cancelled) return;
@@ -97,19 +118,19 @@ export function AppointmentStatus({
           return;
         }
 
-        if (attempt >= MAX_POLL_ATTEMPTS) {
+        if (Date.now() - startedAt >= MAX_WAIT_MS) {
           setTimedOut(true);
           return;
         }
 
-        timeoutId = setTimeout(() => poll(attempt + 1), POLL_INTERVAL_MS);
+        timeoutId = setTimeout(poll, POLL_INTERVAL_MS);
       } catch {
         if (!cancelled) setLoadError(true);
       }
     }
 
     setTimedOut(false);
-    poll(0);
+    poll();
 
     return () => {
       cancelled = true;
