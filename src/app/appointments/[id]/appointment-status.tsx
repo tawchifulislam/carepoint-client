@@ -79,6 +79,18 @@ export function AppointmentStatus({
     const startedAt = Date.now();
     const syncAfterMs = pollKey > 0 ? 0 : SYNC_AFTER_MS;
     let lastSyncAt = 0;
+    let reconciled = false;
+
+    async function load(): Promise<AppointmentDetail | null> {
+      const response = await apiFetch(`/api/appointments/${appointmentId}`);
+      return response.ok ? response.json() : null;
+    }
+
+    async function sync() {
+      await apiFetch(`/api/appointments/${appointmentId}/sync-payment`, {
+        method: 'POST',
+      }).catch(() => undefined);
+    }
 
     async function poll() {
       try {
@@ -90,25 +102,35 @@ export function AppointmentStatus({
           now - lastSyncAt >= SYNC_INTERVAL_MS
         ) {
           lastSyncAt = now;
-          await apiFetch(`/api/appointments/${appointmentId}/sync-payment`, {
-            method: 'POST',
-          }).catch(() => undefined);
+          await sync();
 
           if (cancelled) return;
         }
 
-        const response = await apiFetch(`/api/appointments/${appointmentId}`);
+        let data = await load();
 
         if (cancelled) return;
 
-        if (!response.ok) {
+        if (
+          data &&
+          !justPaid &&
+          !reconciled &&
+          data.status === 'PENDING_PAYMENT'
+        ) {
+          reconciled = true;
+          await sync();
+
+          if (cancelled) return;
+
+          data = await load();
+
+          if (cancelled) return;
+        }
+
+        if (!data) {
           setLoadError(true);
           return;
         }
-
-        const data: AppointmentDetail = await response.json();
-
-        if (cancelled) return;
 
         setLoadError(false);
         setAppointment(data);
@@ -271,6 +293,13 @@ export function AppointmentStatus({
             Choose another time
           </Link>
         </div>
+
+        <button
+          onClick={retry}
+          className="text-sm font-semibold text-primary hover:underline"
+        >
+          Already paid? Check again
+        </button>
 
         {resumeError && (
           <p role="alert" className="text-red">
