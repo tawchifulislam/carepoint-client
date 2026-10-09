@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AlertCircle, Clock, XCircle } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
+import { PRIMARY_BUTTON, SECONDARY_LINK } from '@/lib/button-styles';
 import { formatSlotTime } from '@/lib/format';
 import { ProgressSteps } from '@/components/progress-steps';
+import { StateCard } from '@/components/state-card';
 import type { AppointmentDetail } from '@/types/appointment';
 import { AppointmentSummary } from './appointment-summary';
 
@@ -19,42 +20,6 @@ const CONFIRMING_STEPS = [
   'Confirming with the clinic',
   'Appointment confirmed',
 ];
-
-const TONES = {
-  amber: 'bg-amber-tint text-amber',
-  red: 'bg-red-tint text-red',
-};
-
-const PRIMARY_BUTTON =
-  'rounded-sm bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-hover active:scale-[0.97] disabled:opacity-50';
-const SECONDARY_LINK =
-  'rounded-sm border border-border bg-surface px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-primary';
-
-function StateCard({
-  icon: Icon,
-  tone,
-  title,
-  children,
-}: {
-  icon: LucideIcon;
-  tone: keyof typeof TONES;
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="mx-auto w-full max-w-md text-center">
-      <div
-        className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${TONES[tone]}`}
-      >
-        <Icon className="h-7 w-7" />
-      </div>
-      <h1 className="mt-5 text-2xl font-bold tracking-tight text-ink">
-        {title}
-      </h1>
-      <div className="mt-3 space-y-5 text-sm text-ink-muted">{children}</div>
-    </div>
-  );
-}
 
 export function AppointmentStatus({
   appointmentId,
