@@ -2,20 +2,32 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from '@/lib/auth-client';
+import { Loader2 } from 'lucide-react';
+import { signInHref } from '@/lib/auth-redirect';
+import { useMe } from '@/lib/use-me';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { data: session, isPending } = useSession();
+  const { me, loading } = useMe();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isPending && !session) {
-      router.replace('/sign-in');
+    if (!loading && !me) {
+      router.replace(
+        signInHref(`${window.location.pathname}${window.location.search}`),
+      );
     }
-  }, [isPending, session, router]);
+  }, [loading, me, router]);
 
-  if (isPending || !session) {
-    return <p className="p-8 text-center">Loading...</p>;
+  if (loading || !me) {
+    return (
+      <div
+        role="status"
+        aria-label="Loading"
+        className="flex justify-center py-24"
+      >
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    );
   }
 
   return <>{children}</>;

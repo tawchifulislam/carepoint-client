@@ -3,30 +3,19 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useSession } from '@/lib/auth-client';
 import { apiFetch } from '@/lib/api';
+import { signInHref } from '@/lib/auth-redirect';
 import {
   chipDateLabel,
+  dhakaDateKey,
   formatDayLabel,
   formatSlotTime,
   getDhakaHour,
 } from '@/lib/format';
-
-interface Slot {
-  start: string;
-  end: string;
-}
-
-interface DaySlots {
-  date: string;
-  slots: Slot[];
-}
+import { useMe } from '@/lib/use-me';
+import type { DaySlots, Slot } from '@/types/availability';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-function todayKey(): string {
-  return new Date().toISOString().slice(0, 10);
-}
 
 function addDaysToKey(dateKey: string, amount: number): string {
   const d = new Date(`${dateKey}T00:00:00Z`);
@@ -60,10 +49,11 @@ export function SlotPicker({
   doctorId: string;
   consultationFee: number;
 }) {
-  const { data: session } = useSession();
+  const { me, loading: authLoading } = useMe();
   const router = useRouter();
+  const today = dhakaDateKey(new Date());
 
-  const [windowStart, setWindowStart] = useState(todayKey());
+  const [windowStart, setWindowStart] = useState(today);
   const [days, setDays] = useState<DaySlots[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeDateIndex, setActiveDateIndex] = useState(0);
@@ -92,12 +82,14 @@ export function SlotPicker({
   }, [doctorId, windowStart]);
 
   async function confirmBooking() {
-    if (!selectedSlot) return;
+    if (!selectedSlot || authLoading) return;
 
     setError(null);
 
-    if (!session) {
-      router.push('/sign-in');
+    if (!me) {
+      router.push(
+        signInHref(`${window.location.pathname}${window.location.search}`),
+      );
       return;
     }
 
@@ -142,7 +134,7 @@ export function SlotPicker({
 
   const activeDay = days[activeDateIndex];
   const periods = activeDay ? groupByPeriod(activeDay.slots) : [];
-  const today = todayKey();
+  const atEarliestWeek = windowStart <= today;
 
   return (
     <div className="grid gap-10 md:grid-cols-[1fr_320px]">
@@ -153,8 +145,13 @@ export function SlotPicker({
 
         <div className="mt-3 flex items-center gap-2">
           <button
-            onClick={() => setWindowStart(w => addDaysToKey(w, -7))}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border text-ink-muted hover:border-primary hover:text-primary"
+            onClick={() =>
+              setWindowStart(w =>
+                addDaysToKey(w, -7) < today ? today : addDaysToKey(w, -7),
+              )
+            }
+            disabled={atEarliestWeek}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border text-ink-muted transition-colors hover:border-primary hover:text-primary disabled:opacity-40 disabled:hover:border-border disabled:hover:text-ink-muted"
             aria-label="Previous week"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -184,19 +181,20 @@ export function SlotPicker({
 
           <button
             onClick={() => setWindowStart(w => addDaysToKey(w, 7))}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border text-ink-muted hover:border-primary hover:text-primary"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border text-ink-muted transition-colors hover:border-primary hover:text-primary"
             aria-label="Next week"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
 
-          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border text-ink-muted hover:border-primary hover:text-primary">
+          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border text-ink-muted transition-colors hover:border-primary hover:text-primary">
             <Calendar className="h-4 w-4" />
             <input
               type="date"
               min={today}
               onChange={e => {
-                if (e.target.value) setWindowStart(e.target.value);
+                if (e.target.value && e.target.value >= today)
+                  setWindowStart(e.target.value);
               }}
               className="absolute inset-0 cursor-pointer opacity-0"
               aria-label="Jump to date"
@@ -255,7 +253,7 @@ export function SlotPicker({
             <button
               onClick={confirmBooking}
               disabled={confirming}
-              className="mt-4 w-full rounded-sm bg-primary px-4 py-3 text-sm font-semibold text-white hover:bg-primary-hover disabled:opacity-50"
+              className="mt-4 w-full rounded-sm bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:opacity-50"
             >
               {confirming ? 'Processing...' : 'Confirm & Pay'}
             </button>
@@ -301,7 +299,7 @@ export function SlotPicker({
             <button
               onClick={confirmBooking}
               disabled={confirming}
-              className="mt-4 w-full rounded-sm bg-primary px-4 py-3 text-sm font-semibold text-white hover:bg-primary-hover disabled:opacity-50"
+              className="mt-4 w-full rounded-sm bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:opacity-50"
             >
               {confirming ? 'Processing...' : 'Confirm & Pay'}
             </button>

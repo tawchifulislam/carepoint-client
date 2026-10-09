@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { apiFetch } from './api';
+import { createContext, useContext } from 'react';
 
 export interface MeResponse {
   id: string;
@@ -13,30 +12,21 @@ export interface MeResponse {
   adminOfClinic: { id: string; approvalStatus: string } | null;
 }
 
-export function useMe() {
-  const [me, setMe] = useState<MeResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+export interface AuthContextValue {
+  me: MeResponse | null;
+  loading: boolean;
+  refresh: () => Promise<MeResponse | null>;
+  signOutUser: () => Promise<void>;
+}
 
-  useEffect(() => {
-    let cancelled = false;
+export const AuthContext = createContext<AuthContextValue | null>(null);
 
-    async function load() {
-      try {
-        const response = await apiFetch('/api/me');
-        if (!response.ok) return;
-        const data = await response.json();
-        if (!cancelled) setMe(data);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
+export function useMe(): AuthContextValue {
+  const value = useContext(AuthContext);
 
-    load();
+  if (!value) {
+    throw new Error('useMe must be used inside AuthProvider');
+  }
 
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return { me, loading };
+  return value;
 }

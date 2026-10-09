@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
-import { signOut } from '@/lib/auth-client';
 import { useMe } from '@/lib/use-me';
 import { Container } from './container';
 
@@ -15,7 +14,7 @@ const DASHBOARD_PATHS: Record<string, string> = {
 };
 
 export function Header() {
-  const { me, loading } = useMe();
+  const { me, loading, signOutUser } = useMe();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -42,7 +41,7 @@ export function Header() {
           : 'border-transparent bg-transparent'
       }`}
     >
-      <Container className="flex h-18 items-center justify-between">
+      <Container className="flex h-[72px] items-center justify-between">
         <Link
           href="/"
           className="font-display text-xl font-bold tracking-tight text-ink"
@@ -72,7 +71,7 @@ export function Header() {
                 Dashboard
               </Link>
               <button
-                onClick={() => signOut()}
+                onClick={() => signOutUser()}
                 className="rounded-sm border border-border px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-ink/5"
               >
                 Sign out
@@ -136,7 +135,7 @@ export function Header() {
                   <button
                     onClick={() => {
                       setMenuOpen(false);
-                      signOut();
+                      signOutUser();
                     }}
                     className="rounded-sm px-3 py-2.5 text-left text-sm text-ink hover:bg-paper"
                   >

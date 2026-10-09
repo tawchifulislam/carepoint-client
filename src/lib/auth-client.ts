@@ -3,9 +3,11 @@
 import { createAuthClient } from 'better-auth/react';
 import { jwtClient } from 'better-auth/client/plugins';
 
+export const SESSION_TOKEN_KEY = 'bearer_token';
+
 function readStoredSessionToken() {
   if (typeof window === 'undefined') return '';
-  return localStorage.getItem('bearer_token') ?? '';
+  return localStorage.getItem(SESSION_TOKEN_KEY) ?? '';
 }
 
 export const authClient = createAuthClient({
@@ -19,7 +21,7 @@ export const authClient = createAuthClient({
     onSuccess: ctx => {
       const sessionToken = ctx.response.headers.get('set-auth-token');
       if (sessionToken) {
-        localStorage.setItem('bearer_token', sessionToken);
+        localStorage.setItem(SESSION_TOKEN_KEY, sessionToken);
       }
     },
   },
