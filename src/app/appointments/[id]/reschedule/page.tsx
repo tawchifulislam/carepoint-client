@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
 import { Container } from '@/components/container';
 import { ProtectedRoute } from '@/components/protected-route';
 import { ReschedulePicker } from './reschedule-picker';
+
+export const metadata: Metadata = {
+  title: 'Reschedule appointment | CarePoint',
+  robots: { index: false },
+};
 
 export default async function ReschedulePage({
   params,
@@ -10,14 +16,9 @@ export default async function ReschedulePage({
   const { id } = await params;
 
   return (
-    <Container className="py-12">
+    <Container className="py-14">
       <ProtectedRoute>
-        <h1 className="font-display text-2xl font-semibold text-ink">
-          Reschedule appointment
-        </h1>
-        <div className="mt-6">
-          <ReschedulePicker appointmentId={id} />
-        </div>
+        <ReschedulePicker appointmentId={id} />
       </ProtectedRoute>
     </Container>
   );
