@@ -1,204 +1,192 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useCallback, useEffect, useState } from 'react';
+import { Trash2 } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
-import {
-  CreateAvailabilityInput,
-  createAvailabilitySchema,
-} from '@/lib/validators/availability.schema';
-
-const WEEKDAYS = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-];
-
-interface AvailabilityRule {
-  id: string;
-  weekday: number;
-  startTime: string;
-  endTime: string;
-  slotDurationMin: number;
-  bufferMin: number;
-}
+import { PRIMARY_BUTTON } from '@/lib/button-styles';
+import { formatClock, WEEKDAYS } from '@/lib/schedule';
+import { ConfirmDialog } from '@/components/confirm-dialog';
+import type { AvailabilityRule } from '@/types/doctor-portal';
+import { AddWindowForm } from './add-window-form';
 
 export default function AvailabilityPage() {
-  const [rules, setRules] = useState<AvailabilityRule[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [serverError, setServerError] = useState<string | null>(null);
+  const [rules, setRules] = useState<AvailabilityRule[] | null>(null);
+  const [loadError, setLoadError] = useState(false);
+  const [removeTarget, setRemoveTarget] = useState<AvailabilityRule | null>(
+    null,
+  );
+  const [removing, setRemoving] = useState(false);
+  const [banner, setBanner] = useState<string | null>(null);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<CreateAvailabilityInput>({
-    resolver: zodResolver(createAvailabilitySchema),
-    defaultValues: { bufferMin: 0, slotDurationMin: 30 },
-  });
+  const load = useCallback(async () => {
+    setLoadError(false);
 
-  async function load() {
-    const response = await apiFetch('/api/doctors/me/availability');
-    setRules(await response.json());
-    setLoading(false);
-  }
+    try {
+      const response = await apiFetch('/api/doctors/me/availability');
+
+      if (!response.ok) {
+        throw new Error('Request failed');
+      }
+
+      setRules(await response.json());
+    } catch {
+      setLoadError(true);
+    }
+  }, []);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
-  async function onSubmit(values: CreateAvailabilityInput) {
-    setServerError(null);
+  async function confirmRemove() {
+    if (!removeTarget) return;
 
-    const response = await apiFetch('/api/doctors/me/availability', {
-      method: 'POST',
-      body: JSON.stringify(values),
-    });
-    const data = await response.json();
+    setRemoving(true);
+    setBanner(null);
 
-    if (!response.ok) {
-      setServerError(
-        typeof data.error === 'string'
-          ? data.error
-          : 'Could not save this rule.',
+    try {
+      const response = await apiFetch(
+        `/api/doctors/me/availability/${removeTarget.id}`,
+        { method: 'DELETE' },
       );
-      return;
-    }
 
-    reset({
-      bufferMin: 0,
-      slotDurationMin: 30,
-      weekday: undefined,
-      startTime: '',
-      endTime: '',
-    });
-    await load();
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        setBanner(
+          typeof data.error === 'string'
+            ? data.error
+            : 'Could not remove this window.',
+        );
+      } else {
+        await load();
+      }
+    } catch {
+      setBanner('Something went wrong. Please try again.');
+    } finally {
+      setRemoving(false);
+      setRemoveTarget(null);
+    }
   }
 
-  async function deleteRule(id: string) {
-    await apiFetch(`/api/doctors/me/availability/${id}`, { method: 'DELETE' });
-    await load();
+  if (loadError && rules === null) {
+    return (
+      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center">
+        <p className="font-semibold text-ink">
+          Could not load your availability
+        </p>
+        <p className="mt-1 text-sm text-ink-muted">
+          Check your connection and try again.
+        </p>
+        <button onClick={load} className={`${PRIMARY_BUTTON} mt-5`}>
+          Try again
+        </button>
+      </div>
+    );
   }
 
   return (
-    <div className="grid gap-8 md:grid-cols-[1fr_320px]">
-      <div>
-        {loading ? (
-          <p className="text-ink-muted">Loading...</p>
-        ) : rules.length === 0 ? (
-          <p className="text-ink-muted">No availability rules yet.</p>
-        ) : (
-          <div className="space-y-2">
-            {rules.map(rule => (
-              <div
-                key={rule.id}
-                className="flex items-center justify-between rounded-md border border-border bg-surface p-4 shadow-card"
-              >
-                <div>
-                  <p className="font-medium text-ink">
-                    {WEEKDAYS[rule.weekday]}
-                  </p>
-                  <p className="font-mono text-sm text-ink-muted">
-                    {rule.startTime} - {rule.endTime} &middot;{' '}
-                    {rule.slotDurationMin}min slots
-                    {rule.bufferMin > 0 && `, ${rule.bufferMin}min buffer`}
-                  </p>
-                </div>
-                <button
-                  onClick={() => deleteRule(rule.id)}
-                  className="text-sm text-red hover:underline"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="h-fit space-y-3 rounded-md border border-border bg-surface p-5 shadow-card"
-      >
-        <h2 className="font-display text-sm font-semibold text-ink">
-          Add a rule
+    <div className="grid gap-10 lg:grid-cols-[1fr_340px]">
+      <section aria-labelledby="weekly-heading">
+        <h2
+          id="weekly-heading"
+          className="text-sm font-semibold text-ink-muted"
+        >
+          Weekly schedule
         </h2>
 
-        <div>
-          <label className="text-sm text-ink-muted">Day</label>
-          <select
-            {...register('weekday', { valueAsNumber: true })}
-            className="mt-1 w-full rounded-sm border border-border bg-surface px-3 py-2 text-sm text-ink"
+        {banner && (
+          <p
+            role="alert"
+            className="mt-3 rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
           >
-            <option value="">Select a day</option>
-            {WEEKDAYS.map((day, i) => (
-              <option key={day} value={i}>
-                {day}
-              </option>
-            ))}
-          </select>
-          {errors.weekday && (
-            <p className="mt-1 text-sm text-red">Select a day</p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <label className="text-sm text-ink-muted">Start</label>
-            <input
-              type="time"
-              {...register('startTime')}
-              className="mt-1 w-full rounded-sm border border-border bg-surface px-3 py-2 text-sm text-ink"
-            />
-          </div>
-          <div>
-            <label className="text-sm text-ink-muted">End</label>
-            <input
-              type="time"
-              {...register('endTime')}
-              className="mt-1 w-full rounded-sm border border-border bg-surface px-3 py-2 text-sm text-ink"
-            />
-          </div>
-        </div>
-        {(errors.startTime || errors.endTime) && (
-          <p className="text-sm text-red">Enter valid start and end times</p>
+            {banner}
+          </p>
         )}
 
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <label className="text-sm text-ink-muted">Slot length (min)</label>
-            <input
-              type="number"
-              {...register('slotDurationMin', { valueAsNumber: true })}
-              className="mt-1 w-full rounded-sm border border-border bg-surface px-3 py-2 text-sm text-ink"
-            />
-          </div>
-          <div>
-            <label className="text-sm text-ink-muted">Buffer (min)</label>
-            <input
-              type="number"
-              {...register('bufferMin', { valueAsNumber: true })}
-              className="mt-1 w-full rounded-sm border border-border bg-surface px-3 py-2 text-sm text-ink"
-            />
-          </div>
-        </div>
+        {rules === null ? (
+          <div className="mt-4 h-96 animate-pulse rounded-xl bg-border" />
+        ) : (
+          <>
+            {rules.length === 0 && (
+              <p className="mt-4 rounded-md border border-amber bg-amber-tint px-4 py-3 text-sm text-ink">
+                You have no availability yet. Patients cannot book you until you
+                add at least one window.
+              </p>
+            )}
 
-        {serverError && <p className="text-sm text-red">{serverError}</p>}
+            <ul className="mt-4 rounded-xl border border-border bg-surface px-5">
+              {WEEKDAYS.map((name, weekday) => {
+                const dayRules = rules.filter(rule => rule.weekday === weekday);
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full rounded-sm bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-50"
-        >
-          {isSubmitting ? 'Saving...' : 'Add rule'}
-        </button>
-      </form>
+                return (
+                  <li
+                    key={name}
+                    className="flex gap-4 border-b border-border py-4 last:border-b-0"
+                  >
+                    <div className="w-28 shrink-0 pt-2 text-sm font-semibold text-ink">
+                      {name}
+                    </div>
+
+                    <div className="min-w-0 flex-1 space-y-2">
+                      {dayRules.length === 0 ? (
+                        <p className="pt-2 text-sm text-ink-muted">
+                          Not available
+                        </p>
+                      ) : (
+                        dayRules.map(rule => (
+                          <div
+                            key={rule.id}
+                            className="flex items-center justify-between gap-3 rounded-md bg-primary-tint px-3 py-2"
+                          >
+                            <div>
+                              <p className="font-mono text-sm font-medium text-primary-hover">
+                                {formatClock(rule.startTime)} -{' '}
+                                {formatClock(rule.endTime)}
+                              </p>
+                              <p className="text-xs text-ink-muted">
+                                {rule.slotDurationMin} min slots
+                                {rule.bufferMin > 0
+                                  ? `, ${rule.bufferMin} min buffer`
+                                  : ''}
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => setRemoveTarget(rule)}
+                              aria-label={`Remove ${name} ${formatClock(rule.startTime)} to ${formatClock(rule.endTime)}`}
+                              className="rounded-sm p-2 text-ink-muted transition-colors hover:bg-red-tint hover:text-red"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
+      </section>
+
+      <div className="lg:sticky lg:top-24 lg:h-fit">
+        <AddWindowForm onAdded={load} />
+      </div>
+
+      <ConfirmDialog
+        open={removeTarget !== null}
+        title="Remove this window?"
+        description={
+          removeTarget
+            ? `${WEEKDAYS[removeTarget.weekday]}, ${formatClock(removeTarget.startTime)} to ${formatClock(removeTarget.endTime)}. Patients will no longer see these times. Appointments that are already booked are not affected.`
+            : ''
+        }
+        confirmLabel="Remove window"
+        cancelLabel="Keep it"
+        loading={removing}
+        onConfirm={confirmRemove}
+        onClose={() => setRemoveTarget(null)}
+      />
     </div>
   );
 }
