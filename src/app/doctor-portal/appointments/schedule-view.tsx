@@ -23,6 +23,8 @@ const SMALL_PRIMARY =
   'rounded-sm bg-primary px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-primary-hover active:scale-[0.97] disabled:opacity-50';
 const SMALL_SECONDARY =
   'rounded-sm border border-border px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:bg-paper disabled:opacity-50';
+const SMALL_DANGER =
+  'rounded-sm px-3 py-1.5 text-xs font-semibold text-red transition-colors hover:bg-red-tint disabled:opacity-50';
 
 export function ScheduleView() {
   const nowMs = useNow();
@@ -32,6 +34,9 @@ export function ScheduleView() {
   const [actioningId, setActioningId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [noShowTarget, setNoShowTarget] = useState<DoctorAppointment | null>(
+    null,
+  );
+  const [cancelTarget, setCancelTarget] = useState<DoctorAppointment | null>(
     null,
   );
 
@@ -57,29 +62,27 @@ export function ScheduleView() {
     return { finished: ended, groups: [...byDay.entries()] };
   }, [items, nowMs]);
 
-  async function updateStatus(
+  async function runAction(
     appointment: DoctorAppointment,
-    status: 'COMPLETED' | 'NO_SHOW',
+    path: string,
+    body: object | null,
+    fallback: string,
   ) {
     setActioningId(appointment.id);
     setActionError(null);
 
     try {
       const response = await apiFetch(
-        `/api/doctors/me/appointments/${appointment.id}/status`,
+        `/api/doctors/me/appointments/${appointment.id}/${path}`,
         {
           method: 'PATCH',
-          body: JSON.stringify({ status }),
+          ...(body ? { body: JSON.stringify(body) } : {}),
         },
       );
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        setActionError(
-          typeof data.error === 'string'
-            ? data.error
-            : 'Could not update this appointment.',
-        );
+        setActionError(typeof data.error === 'string' ? data.error : fallback);
         return;
       }
 
@@ -91,6 +94,18 @@ export function ScheduleView() {
     }
   }
 
+  function updateStatus(
+    appointment: DoctorAppointment,
+    status: 'COMPLETED' | 'NO_SHOW',
+  ) {
+    return runAction(
+      appointment,
+      'status',
+      { status },
+      'Could not update this appointment.',
+    );
+  }
+
   async function confirmNoShow() {
     if (!noShowTarget) return;
 
@@ -98,12 +113,33 @@ export function ScheduleView() {
     setNoShowTarget(null);
   }
 
+  async function confirmCancel() {
+    if (!cancelTarget) return;
+
+    await runAction(
+      cancelTarget,
+      'cancel',
+      null,
+      'Could not cancel this appointment.',
+    );
+    setCancelTarget(null);
+  }
+
   function actionsFor(appointment: DoctorAppointment) {
+    const busy = actioningId === appointment.id;
+
     if (new Date(appointment.slotStart).getTime() > nowMs) {
-      return null;
+      return (
+        <button
+          onClick={() => setCancelTarget(appointment)}
+          disabled={busy}
+          className={SMALL_DANGER}
+        >
+          Cancel
+        </button>
+      );
     }
 
-    const busy = actioningId === appointment.id;
     const inProgress = new Date(appointment.slotEnd).getTime() > nowMs;
 
     return (
@@ -175,6 +211,7 @@ export function ScheduleView() {
   }
 
   const noShowBusy = noShowTarget !== null && actioningId === noShowTarget.id;
+  const cancelBusy = cancelTarget !== null && actioningId === cancelTarget.id;
 
   return (
     <div className="space-y-10">
@@ -282,6 +319,21 @@ export function ScheduleView() {
         loading={noShowBusy}
         onConfirm={confirmNoShow}
         onClose={() => setNoShowTarget(null)}
+      />
+
+      <ConfirmDialog
+        open={cancelTarget !== null}
+        title="Cancel this appointment?"
+        description={
+          cancelTarget
+            ? `${cancelTarget.patient.name}, ${formatSlotDate(cancelTarget.slotStart)} at ${formatSlotTime(cancelTarget.slotStart)}. The patient is refunded in full and notified by email. This cannot be undone.`
+            : ''
+        }
+        confirmLabel="Cancel appointment"
+        cancelLabel="Keep appointment"
+        loading={cancelBusy}
+        onConfirm={confirmCancel}
+        onClose={() => setCancelTarget(null)}
       />
     </div>
   );
