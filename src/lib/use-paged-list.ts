@@ -8,6 +8,7 @@ export function usePagedList<T extends { id: string }>(basePath: string) {
   const [items, setItems] = useState<T[] | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
   const [error, setError] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const requestId = useRef(0);
@@ -40,6 +41,7 @@ export function usePagedList<T extends { id: string }>(basePath: string) {
       setItems(result.data);
       setPage(1);
       setTotalPages(result.totalPages);
+      setTotal(result.total);
     } catch {
       if (id === requestId.current) setError(true);
     }
@@ -70,6 +72,7 @@ export function usePagedList<T extends { id: string }>(basePath: string) {
       });
       setPage(result.page);
       setTotalPages(result.totalPages);
+      setTotal(result.total);
     } catch {
       if (id === requestId.current) setError(true);
     } finally {
@@ -79,6 +82,7 @@ export function usePagedList<T extends { id: string }>(basePath: string) {
 
   return {
     items,
+    total,
     error,
     loadingMore,
     hasMore: page < totalPages,

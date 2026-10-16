@@ -1,14 +1,17 @@
-'use client';
-
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import type { Metadata } from 'next';
 import { Container } from '@/components/container';
 import { RequireRole } from '@/components/require-role';
+import { TabNav } from '@/components/tab-nav';
+
+export const metadata: Metadata = {
+  title: 'Platform admin | CarePoint',
+  robots: { index: false },
+};
 
 const TABS = [
-  { href: '/super-admin', label: 'Overview' },
-  { href: '/super-admin/clinics', label: 'Pending clinics' },
-  { href: '/super-admin/doctors', label: 'Pending doctors' },
+  { href: '/super-admin', label: 'Overview', exact: true },
+  { href: '/super-admin/clinics', label: 'Clinics' },
+  { href: '/super-admin/doctors', label: 'Doctors' },
 ];
 
 export default function SuperAdminLayout({
@@ -16,32 +19,21 @@ export default function SuperAdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-
   return (
     <RequireRole role="SUPER_ADMIN">
-      <Container className="py-12">
-        <h1 className="font-display text-2xl font-semibold text-ink">
+      <Container className="py-14">
+        <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
           Platform admin
         </h1>
+        <p className="mt-2 text-ink-muted">
+          Review applications and keep an eye on the platform.
+        </p>
 
-        <div className="mt-6 flex gap-2 border-b border-border">
-          {TABS.map(tab => (
-            <Link
-              key={tab.href}
-              href={tab.href}
-              className={`border-b-2 px-4 py-2 text-sm font-medium ${
-                pathname === tab.href
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-ink-muted hover:text-ink'
-              }`}
-            >
-              {tab.label}
-            </Link>
-          ))}
+        <div className="mt-8">
+          <TabNav label="Platform admin" tabs={TABS} />
         </div>
 
-        <div className="mt-6">{children}</div>
+        <div className="mt-8">{children}</div>
       </Container>
     </RequireRole>
   );
