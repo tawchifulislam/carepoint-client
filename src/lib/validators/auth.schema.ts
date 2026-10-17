@@ -5,6 +5,10 @@ const email = z
   .trim()
   .toLowerCase()
   .email('Enter a valid email address');
+const newPassword = z
+  .string()
+  .min(8, 'Use at least 8 characters')
+  .max(128, 'Password is too long');
 
 export const signUpSchema = z.object({
   name: z
@@ -13,10 +17,7 @@ export const signUpSchema = z.object({
     .min(2, 'Enter your full name')
     .max(80, 'Name is too long'),
   email,
-  password: z
-    .string()
-    .min(8, 'Use at least 8 characters')
-    .max(128, 'Password is too long'),
+  password: newPassword,
 });
 
 export type SignUpInput = z.infer<typeof signUpSchema>;
@@ -27,3 +28,19 @@ export const signInSchema = z.object({
 });
 
 export type SignInInput = z.infer<typeof signInSchema>;
+
+export const forgotPasswordSchema = z.object({ email });
+
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+
+export const resetPasswordSchema = z
+  .object({
+    password: newPassword,
+    confirmPassword: z.string().min(1, 'Confirm your new password'),
+  })
+  .refine(value => value.password === value.confirmPassword, {
+    message: 'The passwords do not match',
+    path: ['confirmPassword'],
+  });
+
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;

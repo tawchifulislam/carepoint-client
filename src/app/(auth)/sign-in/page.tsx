@@ -7,9 +7,11 @@ export const metadata: Metadata = { title: 'Sign in | CarePoint' };
 export default async function SignInPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; reset?: string }>;
 }) {
-  const { next } = await searchParams;
+  const { next, reset } = await searchParams;
 
-  return <SignInForm next={safeNextPath(next)} />;
+  return (
+    <SignInForm next={safeNextPath(next)} passwordReset={reset === 'success'} />
+  );
 }

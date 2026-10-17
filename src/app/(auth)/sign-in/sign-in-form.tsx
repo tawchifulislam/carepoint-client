@@ -13,7 +13,13 @@ import { signUpHref } from '@/lib/auth-redirect';
 import { useMe } from '@/lib/use-me';
 import { signInSchema, type SignInInput } from '@/lib/validators/auth.schema';
 
-export function SignInForm({ next }: { next: string }) {
+export function SignInForm({
+  next,
+  passwordReset,
+}: {
+  next: string;
+  passwordReset: boolean;
+}) {
   const router = useRouter();
   const { me, loading, refresh } = useMe();
   const [serverError, setServerError] = useState<string | null>(null);
@@ -66,6 +72,15 @@ export function SignInForm({ next }: { next: string }) {
         Sign in to manage your appointments.
       </p>
 
+      {passwordReset && (
+        <p
+          role="status"
+          className="mt-6 rounded-md border border-primary bg-primary-tint px-4 py-3 text-sm text-primary-hover"
+        >
+          Your password was updated. Sign in with the new one.
+        </p>
+      )}
+
       <div className="mt-8">
         <GoogleAuthSection next={next} />
 
@@ -84,12 +99,22 @@ export function SignInForm({ next }: { next: string }) {
             {...register('email')}
           />
 
-          <PasswordField
-            label="Password"
-            autoComplete="current-password"
-            error={errors.password?.message}
-            {...register('password')}
-          />
+          <div>
+            <PasswordField
+              label="Password"
+              autoComplete="current-password"
+              error={errors.password?.message}
+              {...register('password')}
+            />
+            <div className="mt-2 text-right">
+              <Link
+                href="/forgot-password"
+                className="text-sm font-semibold text-primary hover:underline"
+              >
+                Forgot password?
+              </Link>
+            </div>
+          </div>
 
           {serverError && (
             <p
