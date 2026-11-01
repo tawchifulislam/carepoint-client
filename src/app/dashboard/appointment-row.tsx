@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { formatSlotDate, formatSlotTime } from '@/lib/format';
 import { StatusBadge } from '@/components/status-badge';
+import { formatSlotDate, formatSlotTime } from '@/lib/format';
 import type { PatientAppointment } from '@/types/appointment';
 
 export function AppointmentRow({

@@ -1,12 +1,10 @@
 'use client';
 
 import { forwardRef } from 'react';
-import { Field, controlClass } from './field';
+import { controlClass, Field } from './field';
 
-interface FormFieldProps extends Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  'id'
-> {
+interface FormFieldProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'id'> {
   label: string;
   error?: string;
   hint?: string;

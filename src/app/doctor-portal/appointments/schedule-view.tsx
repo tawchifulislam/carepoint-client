@@ -1,7 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import { ConfirmDialog } from '@/components/confirm-dialog';
 import { apiFetch } from '@/lib/api';
 import { PRIMARY_BUTTON } from '@/lib/button-styles';
 import { addDaysToKey } from '@/lib/date-keys';
@@ -13,7 +14,6 @@ import {
 } from '@/lib/format';
 import { useNow } from '@/lib/use-now';
 import { usePagedList } from '@/lib/use-paged-list';
-import { ConfirmDialog } from '@/components/confirm-dialog';
 import type { DoctorAppointment } from '@/types/doctor-portal';
 import { DoctorAppointmentRow } from './doctor-appointment-row';
 
@@ -131,6 +131,7 @@ export function ScheduleView() {
     if (new Date(appointment.slotStart).getTime() > nowMs) {
       return (
         <button
+          type="button"
           onClick={() => setCancelTarget(appointment)}
           disabled={busy}
           className={SMALL_DANGER}
@@ -150,6 +151,7 @@ export function ScheduleView() {
           </span>
         )}
         <button
+          type="button"
           onClick={() => updateStatus(appointment, 'COMPLETED')}
           disabled={busy}
           className={SMALL_PRIMARY}
@@ -157,6 +159,7 @@ export function ScheduleView() {
           Completed
         </button>
         <button
+          type="button"
           onClick={() => setNoShowTarget(appointment)}
           disabled={busy}
           className={SMALL_SECONDARY}
@@ -174,7 +177,11 @@ export function ScheduleView() {
         <p className="mt-1 text-sm text-ink-muted">
           Check your connection and try again.
         </p>
-        <button onClick={reload} className={`${PRIMARY_BUTTON} mt-5`}>
+        <button
+          type="button"
+          onClick={reload}
+          className={`${PRIMARY_BUTTON} mt-5`}
+        >
           Try again
         </button>
       </div>
@@ -221,7 +228,11 @@ export function ScheduleView() {
           className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
         >
           <p>{actionError ?? 'Could not refresh your schedule.'}</p>
-          <button onClick={reload} className="font-semibold underline">
+          <button
+            type="button"
+            onClick={reload}
+            className="font-semibold underline"
+          >
             Try again
           </button>
         </div>
@@ -298,6 +309,7 @@ export function ScheduleView() {
 
       {hasMore && (
         <button
+          type="button"
           onClick={loadMore}
           disabled={loadingMore}
           className="rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary disabled:opacity-50"

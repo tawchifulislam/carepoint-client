@@ -21,6 +21,7 @@ export default function DoctorAppointmentsPage() {
       >
         {VIEWS.map(item => (
           <button
+            type="button"
             key={item.id}
             onClick={() => setView(item.id)}
             aria-pressed={view === item.id}

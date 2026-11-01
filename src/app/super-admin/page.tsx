@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useCallback, useEffect, useState } from 'react';
 import { MetricCard } from '@/components/metric-card';
 import { apiFetch } from '@/lib/api';
 import { PRIMARY_BUTTON } from '@/lib/button-styles';
@@ -41,7 +41,11 @@ export default function SuperAdminOverviewPage() {
         <p className="mt-1 text-sm text-ink-muted">
           Check your connection and try again.
         </p>
-        <button onClick={load} className={`${PRIMARY_BUTTON} mt-5`}>
+        <button
+          type="button"
+          onClick={load}
+          className={`${PRIMARY_BUTTON} mt-5`}
+        >
           Try again
         </button>
       </div>

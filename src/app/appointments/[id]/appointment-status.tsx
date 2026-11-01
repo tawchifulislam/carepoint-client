@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { AlertCircle, Clock, XCircle } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { ProgressSteps } from '@/components/progress-steps';
+import { StateCard } from '@/components/state-card';
 import { apiFetch } from '@/lib/api';
 import { PRIMARY_BUTTON, SECONDARY_LINK } from '@/lib/button-styles';
 import { formatSlotTime } from '@/lib/format';
-import { ProgressSteps } from '@/components/progress-steps';
-import { StateCard } from '@/components/state-card';
 import type { AppointmentDetail } from '@/types/appointment';
 import { AppointmentSummary } from './appointment-summary';
 
@@ -169,7 +169,7 @@ export function AppointmentStatus({
         title="Could not load this appointment"
       >
         <p>Check your connection and try again.</p>
-        <button onClick={retry} className={PRIMARY_BUTTON}>
+        <button type="button" onClick={retry} className={PRIMARY_BUTTON}>
           Try again
         </button>
       </StateCard>
@@ -215,7 +215,7 @@ export function AppointmentStatus({
               appointments shortly. You will not be charged twice.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-              <button onClick={retry} className={PRIMARY_BUTTON}>
+              <button type="button" onClick={retry} className={PRIMARY_BUTTON}>
                 Check again
               </button>
               <Link href="/dashboard" className={SECONDARY_LINK}>
@@ -244,6 +244,7 @@ export function AppointmentStatus({
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           {holdActive && (
             <button
+              type="button"
               onClick={resumePayment}
               disabled={resuming}
               className={PRIMARY_BUTTON}
@@ -260,6 +261,7 @@ export function AppointmentStatus({
         </div>
 
         <button
+          type="button"
           onClick={retry}
           className="text-sm font-semibold text-primary hover:underline"
         >

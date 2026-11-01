@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { Check } from 'lucide-react';
+import Link from 'next/link';
 import { StatusBadge } from '@/components/status-badge';
 import { formatSlotDate, formatSlotTime } from '@/lib/format';
 import type { AppointmentDetail } from '@/types/appointment';

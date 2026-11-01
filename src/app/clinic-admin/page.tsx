@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { MetricCard } from '@/components/metric-card';
 import { apiFetch } from '@/lib/api';
 import { PRIMARY_BUTTON } from '@/lib/button-styles';
@@ -58,7 +58,11 @@ export default function ClinicOverviewPage() {
         <p className="mt-1 text-sm text-ink-muted">
           Check your connection and try again.
         </p>
-        <button onClick={load} className={`${PRIMARY_BUTTON} mt-5`}>
+        <button
+          type="button"
+          onClick={load}
+          className={`${PRIMARY_BUTTON} mt-5`}
+        >
           Try again
         </button>
       </div>
@@ -102,6 +106,7 @@ export default function ClinicOverviewPage() {
         >
           {RANGES.map(item => (
             <button
+              type="button"
               key={item.id}
               onClick={() => setRange(item.id)}
               aria-pressed={range === item.id}

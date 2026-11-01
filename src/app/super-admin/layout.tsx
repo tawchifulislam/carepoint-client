@@ -20,7 +20,7 @@ export default function SuperAdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <RequireRole role="SUPER_ADMIN">
+    <RequireRole requiredRole="SUPER_ADMIN">
       <Container className="py-14">
         <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
           Platform admin

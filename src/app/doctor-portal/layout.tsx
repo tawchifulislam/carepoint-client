@@ -20,7 +20,7 @@ export default function DoctorPortalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <RequireRole role="DOCTOR">
+    <RequireRole requiredRole="DOCTOR">
       <Container className="py-14">
         <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
           Doctor portal

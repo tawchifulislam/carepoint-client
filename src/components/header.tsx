@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useMe } from '@/lib/use-me';
 import { Container } from './container';
 
@@ -71,6 +71,7 @@ export function Header() {
                 Dashboard
               </Link>
               <button
+                type="button"
                 onClick={() => signOutUser()}
                 className="rounded-sm border border-border px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-ink/5"
               >
@@ -96,6 +97,7 @@ export function Header() {
         </div>
 
         <button
+          type="button"
           onClick={() => setMenuOpen(open => !open)}
           className="text-ink md:hidden"
           aria-label="Toggle menu"
@@ -133,6 +135,7 @@ export function Header() {
                     Dashboard
                   </Link>
                   <button
+                    type="button"
                     onClick={() => {
                       setMenuOpen(false);
                       signOutUser();

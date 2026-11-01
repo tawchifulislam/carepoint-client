@@ -1,12 +1,10 @@
 'use client';
 
 import { forwardRef } from 'react';
-import { Field, controlClass } from './field';
+import { controlClass, Field } from './field';
 
-interface FormTextareaProps extends Omit<
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  'id'
-> {
+interface FormTextareaProps
+  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'id'> {
   label: string;
   error?: string;
   hint?: string;

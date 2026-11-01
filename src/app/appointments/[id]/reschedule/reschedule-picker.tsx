@@ -1,17 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { AlertCircle, ArrowLeft, Clock, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AlertCircle, ArrowLeft, Clock, XCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { SlotConfirmPanel } from '@/components/slot-confirm-panel';
+import { type SlotSelection, SlotSelector } from '@/components/slot-selector';
+import { StateCard } from '@/components/state-card';
 import { apiFetch } from '@/lib/api';
 import { PRIMARY_BUTTON, SECONDARY_LINK } from '@/lib/button-styles';
 import { formatDayLabel, formatSlotDate, formatSlotTime } from '@/lib/format';
 import { CHANGE_CUTOFF_MS } from '@/lib/policy';
 import { useNow } from '@/lib/use-now';
-import { SlotConfirmPanel } from '@/components/slot-confirm-panel';
-import { SlotSelector, type SlotSelection } from '@/components/slot-selector';
-import { StateCard } from '@/components/state-card';
 import type { AppointmentDetail } from '@/types/appointment';
 
 const BLOCKED_COPY: Partial<
@@ -122,6 +122,7 @@ export function ReschedulePicker({ appointmentId }: { appointmentId: string }) {
       >
         <p>Check your connection and try again.</p>
         <button
+          type="button"
           onClick={() => setRetryKey(key => key + 1)}
           className={PRIMARY_BUTTON}
         >

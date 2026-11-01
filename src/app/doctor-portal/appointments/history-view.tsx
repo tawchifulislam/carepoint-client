@@ -33,6 +33,7 @@ export function HistoryView() {
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none [&::-webkit-scrollbar]:hidden">
         {FILTERS.map(item => (
           <button
+            type="button"
             key={item.id || 'all'}
             onClick={() => setFilter(item.id)}
             aria-pressed={filter === item.id}
@@ -49,7 +50,11 @@ export function HistoryView() {
             <p className="font-semibold text-ink">
               Could not load your history
             </p>
-            <button onClick={reload} className={`${PRIMARY_BUTTON} mt-5`}>
+            <button
+              type="button"
+              onClick={reload}
+              className={`${PRIMARY_BUTTON} mt-5`}
+            >
               Try again
             </button>
           </div>
@@ -89,7 +94,11 @@ export function HistoryView() {
         {error && items !== null && (
           <p role="alert" className="mt-4 text-sm text-red">
             Something went wrong while loading.{' '}
-            <button onClick={reload} className="font-semibold underline">
+            <button
+              type="button"
+              onClick={reload}
+              className="font-semibold underline"
+            >
               Try again
             </button>
           </p>
@@ -97,6 +106,7 @@ export function HistoryView() {
 
         {hasMore && (
           <button
+            type="button"
             onClick={loadMore}
             disabled={loadingMore}
             className="mt-4 rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary disabled:opacity-50"

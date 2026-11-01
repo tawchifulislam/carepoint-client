@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { ArrowLeft, Mail } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowLeft, Mail } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { FormField } from '@/components/form-field';
 import { authClient } from '@/lib/auth-client';
 import { PRIMARY_BUTTON } from '@/lib/button-styles';
 import {
-  forgotPasswordSchema,
   type ForgotPasswordInput,
+  forgotPasswordSchema,
 } from '@/lib/validators/auth.schema';
 
 const RESEND_COOLDOWN_SECONDS = 30;
@@ -99,6 +99,7 @@ export function ForgotPasswordForm() {
         )}
 
         <button
+          type="button"
           onClick={resend}
           disabled={cooldown > 0 || resending}
           className="mt-6 rounded-md border border-border bg-surface px-4 py-3 text-sm font-semibold text-ink transition-colors hover:border-primary disabled:opacity-60"

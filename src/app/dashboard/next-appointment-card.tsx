@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { MapPin } from 'lucide-react';
+import Link from 'next/link';
 import { formatSlotDate, formatSlotTime, formatTimeUntil } from '@/lib/format';
 import type { PatientAppointment } from '@/types/appointment';
 
@@ -70,6 +70,7 @@ export function NextAppointmentCard({
               Reschedule
             </Link>
             <button
+              type="button"
               onClick={onCancel}
               className="rounded-sm px-3 py-2.5 text-sm font-semibold text-red transition-colors hover:bg-red-tint"
             >

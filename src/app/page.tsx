@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { ArrowRight, CalendarDays, CircleCheck, Search } from 'lucide-react';
+import Link from 'next/link';
 import { Container } from '@/components/container';
 import { CountUp } from '@/components/count-up';
 import { LiveScheduleCard } from '@/components/live-schedule-card';

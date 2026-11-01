@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
 import {
   ArrowRight,
   CalendarClock,
   CreditCard,
   ShieldCheck,
 } from 'lucide-react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Container } from '@/components/container';
 import { PRIMARY_BUTTON, SECONDARY_LINK } from '@/lib/button-styles';
 

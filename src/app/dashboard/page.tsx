@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { Plus } from 'lucide-react';
+import Link from 'next/link';
 import { Container } from '@/components/container';
 import { ProtectedRoute } from '@/components/protected-route';
 import { AppointmentList } from './appointment-list';

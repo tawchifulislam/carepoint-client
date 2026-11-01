@@ -1,14 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { FormField } from '@/components/form-field';
 import { apiFetch } from '@/lib/api';
 import { PRIMARY_BUTTON } from '@/lib/button-styles';
 import { useMe } from '@/lib/use-me';
-import { createClinicSchema, type CreateClinicInput } from '@/lib/validators/clinic.schema';
+import {
+  type CreateClinicInput,
+  createClinicSchema,
+} from '@/lib/validators/clinic.schema';
 
 export function ClinicApplicationForm() {
   const router = useRouter();
@@ -33,7 +36,9 @@ export function ClinicApplicationForm() {
 
       if (!response.ok) {
         setServerError(
-          typeof data.error === 'string' ? data.error : 'Could not submit your clinic. Please try again.',
+          typeof data.error === 'string'
+            ? data.error
+            : 'Could not submit your clinic. Please try again.',
         );
         return;
       }
@@ -69,12 +74,19 @@ export function ClinicApplicationForm() {
       />
 
       {serverError && (
-        <p role="alert" className="rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red">
+        <p
+          role="alert"
+          className="rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+        >
           {serverError}
         </p>
       )}
 
-      <button type="submit" disabled={isSubmitting} className={`${PRIMARY_BUTTON} w-full`}>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className={`${PRIMARY_BUTTON} w-full`}
+      >
         {isSubmitting ? 'Submitting...' : 'Submit for review'}
       </button>
     </form>

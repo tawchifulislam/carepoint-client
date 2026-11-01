@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { SlotConfirmPanel } from '@/components/slot-confirm-panel';
+import { type SlotSelection, SlotSelector } from '@/components/slot-selector';
 import { apiFetch } from '@/lib/api';
 import { signInHref } from '@/lib/auth-redirect';
 import { formatDayLabel, formatSlotTime } from '@/lib/format';
 import { useMe } from '@/lib/use-me';
-import { SlotConfirmPanel } from '@/components/slot-confirm-panel';
-import { SlotSelector, type SlotSelection } from '@/components/slot-selector';
 
 export function SlotPicker({
   doctorId,

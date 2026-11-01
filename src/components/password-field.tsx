@@ -1,7 +1,7 @@
 'use client';
 
-import { forwardRef, useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import { forwardRef, useState } from 'react';
 import { FormField } from './form-field';
 
 type PasswordFieldProps = Omit<

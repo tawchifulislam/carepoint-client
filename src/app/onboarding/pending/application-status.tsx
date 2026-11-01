@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { CircleCheck, Clock, XCircle } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { StateCard } from '@/components/state-card';
 import { PRIMARY_BUTTON, SECONDARY_LINK } from '@/lib/button-styles';
 import { useMe } from '@/lib/use-me';
@@ -135,6 +135,7 @@ export function ApplicationStatus() {
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
         {application.status === 'PENDING' && (
           <button
+            type="button"
             onClick={check}
             disabled={checking}
             className={PRIMARY_BUTTON}

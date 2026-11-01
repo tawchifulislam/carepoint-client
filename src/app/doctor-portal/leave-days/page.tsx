@@ -1,18 +1,18 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Trash2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { ConfirmDialog } from '@/components/confirm-dialog';
 import { FormField } from '@/components/form-field';
 import { apiFetch } from '@/lib/api';
 import { PRIMARY_BUTTON } from '@/lib/button-styles';
 import { dhakaDateKey, formatDayLabel } from '@/lib/format';
 import {
-  leaveDaySchema,
   type LeaveDayInput,
+  leaveDaySchema,
 } from '@/lib/validators/availability.schema';
 import type { LeaveDay } from '@/types/doctor-portal';
 
@@ -132,7 +132,11 @@ export default function LeaveDaysPage() {
         <p className="mt-1 text-sm text-ink-muted">
           Check your connection and try again.
         </p>
-        <button onClick={load} className={`${PRIMARY_BUTTON} mt-5`}>
+        <button
+          type="button"
+          onClick={load}
+          className={`${PRIMARY_BUTTON} mt-5`}
+        >
           Try again
         </button>
       </div>
@@ -183,6 +187,7 @@ export default function LeaveDaysPage() {
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setRemoveTarget(day)}
                   aria-label={`Remove leave day ${formatDayLabel(day.date)}`}
                   className="rounded-sm p-2 text-ink-muted transition-colors hover:bg-red-tint hover:text-red"

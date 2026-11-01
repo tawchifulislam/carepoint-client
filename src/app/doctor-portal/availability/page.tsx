@@ -1,11 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { ConfirmDialog } from '@/components/confirm-dialog';
 import { apiFetch } from '@/lib/api';
 import { PRIMARY_BUTTON } from '@/lib/button-styles';
 import { formatClock, WEEKDAYS } from '@/lib/schedule';
-import { ConfirmDialog } from '@/components/confirm-dialog';
 import type { AvailabilityRule } from '@/types/doctor-portal';
 import { AddWindowForm } from './add-window-form';
 
@@ -77,7 +77,11 @@ export default function AvailabilityPage() {
         <p className="mt-1 text-sm text-ink-muted">
           Check your connection and try again.
         </p>
-        <button onClick={load} className={`${PRIMARY_BUTTON} mt-5`}>
+        <button
+          type="button"
+          onClick={load}
+          className={`${PRIMARY_BUTTON} mt-5`}
+        >
           Try again
         </button>
       </div>
@@ -151,6 +155,7 @@ export default function AvailabilityPage() {
                               </p>
                             </div>
                             <button
+                              type="button"
                               onClick={() => setRemoveTarget(rule)}
                               aria-label={`Remove ${name} ${formatClock(rule.startTime)} to ${formatClock(rule.endTime)}`}
                               className="rounded-sm p-2 text-ink-muted transition-colors hover:bg-red-tint hover:text-red"

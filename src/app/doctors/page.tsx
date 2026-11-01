@@ -1,6 +1,6 @@
+import { ArrowRight, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { Container } from '@/components/container';
 import { publicApiFetch } from '@/lib/api-server';
 import { formatNextAvailable } from '@/lib/format';

@@ -31,7 +31,7 @@ export function CountUp({
 
       function tick(now: number) {
         const progress = Math.min((now - start) / durationMs, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
+        const eased = 1 - (1 - progress) ** 3;
         setDisplay(Math.floor(eased * value));
         if (progress < 1) frame = requestAnimationFrame(tick);
       }

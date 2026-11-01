@@ -1,10 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { FormField } from '@/components/form-field';
 import { FormSelect } from '@/components/form-select';
 import { FormTextarea } from '@/components/form-textarea';
@@ -13,8 +13,8 @@ import { PRIMARY_BUTTON } from '@/lib/button-styles';
 import { canonicalSpecialty, SPECIALTIES } from '@/lib/specialties';
 import { useMe } from '@/lib/use-me';
 import {
-  doctorApplicationSchema,
   type DoctorApplicationInput,
+  doctorApplicationSchema,
 } from '@/lib/validators/doctor.schema';
 import type { ClinicSummary } from '@/types/clinic';
 
@@ -103,7 +103,11 @@ export function DoctorApplicationForm() {
         <p className="mt-1 text-sm text-ink-muted">
           Check your connection and try again.
         </p>
-        <button onClick={loadClinics} className={`${PRIMARY_BUTTON} mt-5`}>
+        <button
+          type="button"
+          onClick={loadClinics}
+          className={`${PRIMARY_BUTTON} mt-5`}
+        >
           Try again
         </button>
       </div>

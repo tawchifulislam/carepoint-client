@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { PRIMARY_BUTTON } from '@/lib/button-styles';
 import {
   chipDateLabel,
@@ -129,6 +129,7 @@ export function SlotSelector({
           Check your connection and try again.
         </p>
         <button
+          type="button"
           onClick={() => setRetryKey(key => key + 1)}
           className={`${PRIMARY_BUTTON} mt-5`}
         >
@@ -160,6 +161,7 @@ export function SlotSelector({
 
       <div className="mt-3 flex items-center gap-2">
         <button
+          type="button"
           onClick={() => goToWindow(addDaysToKey(windowStart, -WINDOW_DAYS))}
           disabled={atEarliestWeek}
           className={NAV_BUTTON}
@@ -183,6 +185,7 @@ export function SlotSelector({
 
             return (
               <button
+                type="button"
                 key={day.date}
                 onClick={() => setActiveIndex(index)}
                 aria-pressed={active}
@@ -198,6 +201,7 @@ export function SlotSelector({
         </div>
 
         <button
+          type="button"
           onClick={() => goToWindow(addDaysToKey(windowStart, WINDOW_DAYS))}
           className={NAV_BUTTON}
           aria-label="Next week"
@@ -229,6 +233,7 @@ export function SlotSelector({
             </p>
             {!weekHasSlots && (
               <button
+                type="button"
                 onClick={() =>
                   goToWindow(addDaysToKey(windowStart, WINDOW_DAYS))
                 }
@@ -249,6 +254,7 @@ export function SlotSelector({
 
                 return (
                   <button
+                    type="button"
                     key={slot.start}
                     onClick={() =>
                       activeDay && onSelect({ slot, dateKey: activeDay.date })

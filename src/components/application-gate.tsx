@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useMe } from '@/lib/use-me';
 
 export function ApplicationGate({ children }: { children: React.ReactNode }) {

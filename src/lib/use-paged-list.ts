@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { apiFetch } from './api';
 import type { Paginated } from '@/types/pagination';
+import { apiFetch } from './api';
 
 export function usePagedList<T extends { id: string }>(basePath: string) {
   const [items, setItems] = useState<T[] | null>(null);

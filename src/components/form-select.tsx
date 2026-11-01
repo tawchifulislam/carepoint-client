@@ -1,13 +1,11 @@
 'use client';
 
-import { forwardRef } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { Field, controlClass } from './field';
+import { forwardRef } from 'react';
+import { controlClass, Field } from './field';
 
-interface FormSelectProps extends Omit<
-  React.SelectHTMLAttributes<HTMLSelectElement>,
-  'id'
-> {
+interface FormSelectProps
+  extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'id'> {
   label: string;
   error?: string;
   hint?: string;

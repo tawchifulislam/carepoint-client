@@ -1,18 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { LinkIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { LinkIcon } from 'lucide-react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { PasswordField } from '@/components/password-field';
 import { authClient, SESSION_TOKEN_KEY } from '@/lib/auth-client';
 import { PRIMARY_BUTTON } from '@/lib/button-styles';
 import { useMe } from '@/lib/use-me';
 import {
-  resetPasswordSchema,
   type ResetPasswordInput,
+  resetPasswordSchema,
 } from '@/lib/validators/auth.schema';
 
 function InvalidLink() {

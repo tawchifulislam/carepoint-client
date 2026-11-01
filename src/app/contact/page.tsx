@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import { Mail } from 'lucide-react';
+import type { Metadata } from 'next';
 import { LegalPage, LegalSection } from '@/components/legal-page';
 import { CONTACT_EMAIL } from '@/lib/site';
 

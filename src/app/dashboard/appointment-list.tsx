@@ -1,14 +1,14 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ConfirmDialog } from '@/components/confirm-dialog';
 import { apiFetch } from '@/lib/api';
 import { formatSlotDate, formatSlotTime } from '@/lib/format';
 import { useNow } from '@/lib/use-now';
-import { ConfirmDialog } from '@/components/confirm-dialog';
-import type { Paginated } from '@/types/pagination';
 import type { PatientAppointment } from '@/types/appointment';
+import type { Paginated } from '@/types/pagination';
 import { AppointmentRow } from './appointment-row';
 import { NextAppointmentCard } from './next-appointment-card';
 
@@ -168,6 +168,7 @@ export function AppointmentList() {
           Check your connection and try again.
         </p>
         <button
+          type="button"
           onClick={loadFirstPage}
           className="mt-5 rounded-sm bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
         >
@@ -265,6 +266,7 @@ export function AppointmentList() {
                         Reschedule
                       </Link>
                       <button
+                        type="button"
                         onClick={() => setCancelTarget(item)}
                         className={ROW_DANGER}
                       >
@@ -308,6 +310,7 @@ export function AppointmentList() {
 
           {page < totalPages && (
             <button
+              type="button"
               onClick={loadMore}
               disabled={loadingMore}
               className="mt-4 rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary disabled:opacity-50"

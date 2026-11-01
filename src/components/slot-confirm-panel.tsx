@@ -76,6 +76,7 @@ export function SlotConfirmPanel({
 
   const confirmButton = (
     <button
+      type="button"
       onClick={onConfirm}
       disabled={confirming}
       className={`${PRIMARY_BUTTON} mt-4 w-full`}
@@ -102,6 +103,7 @@ export function SlotConfirmPanel({
 
       {hasSelection && (
         <button
+          type="button"
           onClick={() => setSheetOpen(true)}
           className="fixed inset-x-4 bottom-4 z-30 flex items-center justify-between rounded-lg bg-primary px-5 py-3.5 text-white shadow-card md:hidden"
         >

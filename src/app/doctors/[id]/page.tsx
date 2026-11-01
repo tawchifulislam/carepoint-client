@@ -1,5 +1,5 @@
-import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { Container } from '@/components/container';
 import { publicApiFetch } from '@/lib/api-server';
 import { SlotPicker } from './slot-picker';
