@@ -53,9 +53,13 @@ export function ConfirmDialog({
       aria-modal="true"
       aria-labelledby="confirm-dialog-title"
     >
-      <div
-        className="absolute inset-0 bg-ink/40"
-        onClick={loading ? undefined : onClose}
+      <button
+        type="button"
+        tabIndex={-1}
+        aria-label="Close dialog"
+        disabled={loading}
+        onClick={onClose}
+        className="absolute inset-0 cursor-default bg-ink/40"
       />
       <div className="relative w-full max-w-md rounded-t-xl bg-surface p-6 pb-[calc(env(safe-area-inset-bottom,0px)+24px)] shadow-card sm:rounded-xl sm:pb-6">
         <h2

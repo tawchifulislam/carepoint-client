@@ -119,9 +119,12 @@ export function SlotConfirmPanel({
 
       {sheetOpen && hasSelection && (
         <>
-          <div
+          <button
+            type="button"
+            tabIndex={-1}
+            aria-label="Close summary"
             onClick={() => setSheetOpen(false)}
-            className="fixed inset-0 z-40 bg-ink/40 md:hidden"
+            className="fixed inset-0 z-40 cursor-default bg-ink/40 md:hidden"
           />
           <div
             role="dialog"

@@ -76,21 +76,21 @@
 }
 
 :root {
-  color-scheme: light;
+	color-scheme: light;
 }
 
 body {
-  font-size: 1rem;
-  line-height: 1.6;
+	font-size: 1rem;
+	line-height: 1.6;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-delay: 0s !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
 }

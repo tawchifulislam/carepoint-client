@@ -1,5 +1,18 @@
+export const OAUTH_NEXT_KEY = 'oauth_next';
+
 const AUTH_PATH = /^\/(sign-in|sign-up)(\/|\?|$)/;
-const CONTROL_CHARS = /[\u0000-\u001f]/;
+
+function hasControlCharacters(value: string): boolean {
+  for (const char of value) {
+    const code = char.charCodeAt(0);
+
+    if (code < 32 || code === 127) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 export function safeNextPath(raw: string | null | undefined): string {
   if (!raw) return '/';
@@ -7,7 +20,7 @@ export function safeNextPath(raw: string | null | undefined): string {
   const isLocalPath =
     raw.startsWith('/') && !raw.startsWith('//') && !raw.includes('\\');
 
-  if (!isLocalPath || CONTROL_CHARS.test(raw) || AUTH_PATH.test(raw)) {
+  if (!isLocalPath || hasControlCharacters(raw) || AUTH_PATH.test(raw)) {
     return '/';
   }
 
