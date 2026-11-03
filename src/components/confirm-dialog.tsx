@@ -1,5 +1,6 @@
 'use client';
 
+import { TriangleAlert } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 interface ConfirmDialogProps {
@@ -59,12 +60,15 @@ export function ConfirmDialog({
         aria-label="Close dialog"
         disabled={loading}
         onClick={onClose}
-        className="absolute inset-0 cursor-default bg-ink/40"
+        className="absolute inset-0 cursor-default bg-ink/50 backdrop-blur-[2px] animate-in fade-in-0 duration-200"
       />
-      <div className="relative w-full max-w-md rounded-t-xl bg-surface p-6 pb-[calc(env(safe-area-inset-bottom,0px)+24px)] shadow-card sm:rounded-xl sm:pb-6">
+      <div className="relative w-full max-w-md rounded-t-xl bg-surface p-6 pb-[calc(env(safe-area-inset-bottom,0px)+24px)] shadow-lift animate-in fade-in-0 slide-in-from-bottom-4 duration-200 sm:mx-4 sm:rounded-xl sm:pb-6 sm:zoom-in-95 sm:slide-in-from-bottom-0">
+        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-red-tint text-red">
+          <TriangleAlert className="h-5 w-5" />
+        </span>
         <h2
           id="confirm-dialog-title"
-          className="text-lg font-semibold text-ink"
+          className="mt-4 text-lg font-semibold text-ink"
         >
           {title}
         </h2>
@@ -76,7 +80,7 @@ export function ConfirmDialog({
             ref={cancelRef}
             onClick={onClose}
             disabled={loading}
-            className="rounded-sm border border-border px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-paper disabled:opacity-50"
+            className="rounded-sm border border-border px-4 py-3 text-sm font-semibold text-ink transition-colors hover:bg-paper disabled:opacity-50 sm:py-2.5"
           >
             {cancelLabel}
           </button>
@@ -84,7 +88,7 @@ export function ConfirmDialog({
             type="button"
             onClick={onConfirm}
             disabled={loading}
-            className="rounded-sm bg-red px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="rounded-sm bg-red px-4 py-3 text-sm font-semibold text-white shadow-[0_8px_18px_-8px_rgb(180_71_46/0.6)] transition hover:opacity-90 disabled:opacity-50 sm:py-2.5"
           >
             {loading ? 'Please wait...' : confirmLabel}
           </button>

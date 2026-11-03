@@ -1,6 +1,13 @@
 'use client';
 
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Moon,
+  Sun,
+  Sunrise,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { PRIMARY_BUTTON } from '@/lib/button-styles';
 import {
@@ -14,7 +21,8 @@ import type { DaySlots, Slot } from '@/types/availability';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const WINDOW_DAYS = 7;
 const NAV_BUTTON =
-  'flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-border text-ink-muted transition-colors hover:border-primary hover:text-primary disabled:opacity-40 disabled:hover:border-border disabled:hover:text-ink-muted';
+  'flex h-10 w-10 shrink-0 items-center justify-center rounded-sm border border-border bg-surface text-ink-muted shadow-[0_1px_2px_rgb(10_26_37/0.04)] transition-colors hover:border-primary/50 hover:text-primary disabled:opacity-40 disabled:hover:border-border disabled:hover:text-ink-muted';
+const PERIOD_ICONS = { Morning: Sunrise, Afternoon: Sun, Evening: Moon };
 
 export interface SlotSelection {
   slot: Slot;
@@ -123,7 +131,7 @@ export function SlotSelector({
 
   if (loadError) {
     return (
-      <div className="rounded-lg border border-border bg-surface px-6 py-10 text-center">
+      <div className="rounded-xl border border-border bg-surface px-6 py-10 text-center shadow-card">
         <p className="font-semibold text-ink">Could not load available times</p>
         <p className="mt-1 text-sm text-ink-muted">
           Check your connection and try again.
@@ -142,8 +150,8 @@ export function SlotSelector({
   if (loading) {
     return (
       <div className="space-y-3">
-        <div className="h-12 animate-pulse rounded-md bg-border" />
-        <div className="h-24 animate-pulse rounded-md bg-border" />
+        <div className="h-14 animate-pulse rounded-lg bg-border/70" />
+        <div className="h-32 animate-pulse rounded-lg bg-border/70" />
       </div>
     );
   }
@@ -155,7 +163,7 @@ export function SlotSelector({
 
   return (
     <div>
-      <h3 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">
+      <h3 className="font-mono text-xs font-semibold uppercase tracking-wide text-primary-hover">
         Choose a date
       </h3>
 
@@ -170,18 +178,20 @@ export function SlotSelector({
           <ChevronLeft className="h-4 w-4" />
         </button>
 
-        <div className="flex flex-1 gap-2 overflow-hidden">
+        <div className="flex min-w-0 flex-1 gap-2 overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden">
           {days.map((day, index) => {
             const label = chipDateLabel(day.date, today);
             const active = index === activeIndex;
             const hasSlots = day.slots.length > 0;
 
             let tone =
-              'border-border bg-paper text-ink-muted hover:border-primary';
+              'border-border bg-paper text-ink-muted hover:border-primary/50';
             if (hasSlots)
-              tone = 'border-border bg-surface text-ink hover:border-primary';
+              tone =
+                'border-border bg-surface text-ink hover:border-primary/50';
             if (active)
-              tone = 'border-primary bg-primary-tint text-primary-hover';
+              tone =
+                'border-primary bg-primary text-white shadow-[0_8px_16px_-8px_rgb(10_112_136/0.7)]';
 
             return (
               <button
@@ -189,9 +199,13 @@ export function SlotSelector({
                 key={day.date}
                 onClick={() => setActiveIndex(index)}
                 aria-pressed={active}
-                className={`flex-1 rounded-md border px-1 py-2 text-center transition-colors ${tone}`}
+                className={`min-w-14 flex-1 shrink-0 rounded-md border px-1 py-2.5 text-center transition ${tone}`}
               >
-                <div className="text-[11px] text-ink-muted">{label.top}</div>
+                <div
+                  className={`text-[11px] ${active ? 'text-white/80' : 'text-ink-muted'}`}
+                >
+                  {label.top}
+                </div>
                 <div className="mt-0.5 font-mono text-sm font-semibold">
                   {label.bottom}
                 </div>
@@ -225,7 +239,7 @@ export function SlotSelector({
 
       <div className="mt-8 space-y-6">
         {periods.length === 0 && (
-          <div className="rounded-lg border border-dashed border-border px-5 py-8 text-center">
+          <div className="rounded-xl border border-dashed border-border bg-surface/60 px-5 py-10 text-center">
             <p className="text-sm text-ink">
               {weekHasSlots
                 ? 'No open times on this day.'
@@ -245,34 +259,42 @@ export function SlotSelector({
           </div>
         )}
 
-        {periods.map(period => (
-          <div key={period.label}>
-            <div className="mb-2 text-sm text-ink-muted">{period.label}</div>
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-              {period.slots.map(slot => {
-                const selected = selectedStart === slot.start;
+        {periods.map(period => {
+          const PeriodIcon =
+            PERIOD_ICONS[period.label as keyof typeof PERIOD_ICONS];
 
-                return (
-                  <button
-                    type="button"
-                    key={slot.start}
-                    onClick={() =>
-                      activeDay && onSelect({ slot, dateKey: activeDay.date })
-                    }
-                    aria-pressed={selected}
-                    className={`rounded-md border px-2 py-2.5 font-mono text-sm font-medium transition-colors ${
-                      selected
-                        ? 'border-primary bg-primary text-white'
-                        : 'border-border bg-surface text-ink hover:border-primary'
-                    }`}
-                  >
-                    {formatSlotTime(slot.start)}
-                  </button>
-                );
-              })}
+          return (
+            <div key={period.label}>
+              <div className="mb-2.5 flex items-center gap-2 text-sm font-medium text-ink-muted">
+                <PeriodIcon className="h-4 w-4 text-primary" />
+                {period.label}
+              </div>
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                {period.slots.map(slot => {
+                  const selected = selectedStart === slot.start;
+
+                  return (
+                    <button
+                      type="button"
+                      key={slot.start}
+                      onClick={() =>
+                        activeDay && onSelect({ slot, dateKey: activeDay.date })
+                      }
+                      aria-pressed={selected}
+                      className={`rounded-md border px-2 py-3 font-mono text-sm font-medium transition ${
+                        selected
+                          ? 'border-primary bg-primary text-white shadow-[0_8px_16px_-8px_rgb(10_112_136/0.7)]'
+                          : 'border-border bg-surface text-ink hover:-translate-y-px hover:border-primary/50 hover:bg-primary-tint'
+                      }`}
+                    >
+                      {formatSlotTime(slot.start)}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

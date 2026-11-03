@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Container } from '@/components/container';
+import { PageHeader } from '@/components/page-header';
 import { RequireRole } from '@/components/require-role';
 import { TabNav } from '@/components/tab-nav';
 
@@ -21,15 +22,14 @@ export default function SuperAdminLayout({
 }) {
   return (
     <RequireRole requiredRole="SUPER_ADMIN">
-      <Container className="py-14">
-        <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
-          Platform admin
-        </h1>
-        <p className="mt-2 text-ink-muted">
-          Review applications and keep an eye on the platform.
-        </p>
+      <Container className="py-10 md:py-14">
+        <PageHeader
+          eyebrow="PLATFORM"
+          title="Platform admin"
+          description="Review applications and keep an eye on the platform."
+        />
 
-        <div className="mt-8">
+        <div className="mt-7">
           <TabNav label="Platform admin" tabs={TABS} />
         </div>
 

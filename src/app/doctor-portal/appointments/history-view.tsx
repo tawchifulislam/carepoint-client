@@ -14,10 +14,11 @@ const FILTERS = [
 ];
 
 const CHIP_BASE =
-  'shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors';
-const CHIP_ACTIVE = 'border-primary bg-primary text-white';
+  'shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition';
+const CHIP_ACTIVE =
+  'border-primary bg-primary text-white shadow-[0_6px_14px_-6px_rgb(10_112_136/0.6)]';
 const CHIP_IDLE =
-  'border-border bg-surface text-ink hover:border-primary hover:text-primary-hover';
+  'border-border bg-surface text-ink hover:border-primary/50 hover:text-primary-hover';
 
 export function HistoryView() {
   const [filter, setFilter] = useState('');
@@ -46,7 +47,7 @@ export function HistoryView() {
 
       <div className="mt-6">
         {error && items === null && (
-          <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center">
+          <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center shadow-card">
             <p className="font-semibold text-ink">
               Could not load your history
             </p>
@@ -62,14 +63,14 @@ export function HistoryView() {
 
         {!error && items === null && (
           <div className="space-y-2">
-            <div className="h-16 animate-pulse rounded-lg bg-border" />
-            <div className="h-16 animate-pulse rounded-lg bg-border" />
-            <div className="h-16 animate-pulse rounded-lg bg-border" />
+            <div className="h-16 animate-pulse rounded-lg bg-border/70" />
+            <div className="h-16 animate-pulse rounded-lg bg-border/70" />
+            <div className="h-16 animate-pulse rounded-lg bg-border/70" />
           </div>
         )}
 
         {items !== null && items.length === 0 && (
-          <div className="rounded-xl border border-dashed border-border px-6 py-14 text-center">
+          <div className="rounded-xl border border-dashed border-border bg-surface/60 px-6 py-14 text-center">
             <p className="text-ink">
               {filter
                 ? `No ${activeLabel.toLowerCase()} appointments.`
@@ -109,7 +110,7 @@ export function HistoryView() {
             type="button"
             onClick={loadMore}
             disabled={loadingMore}
-            className="mt-4 rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary disabled:opacity-50"
+            className="mt-4 rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary/50 disabled:opacity-50"
           >
             {loadingMore ? 'Loading...' : 'Show more'}
           </button>

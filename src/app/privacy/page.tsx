@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <LegalPage
+      eyebrow="PRIVACY"
       title="Privacy"
       intro="A plain description of what this demo stores, who can see it, and how it is used."
       updated={PRIVACY_UPDATED}

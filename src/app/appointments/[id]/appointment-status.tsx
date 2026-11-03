@@ -179,9 +179,9 @@ export function AppointmentStatus({
   if (!appointment) {
     return (
       <div className="mx-auto w-full max-w-md">
-        <div className="mx-auto h-14 w-14 animate-pulse rounded-full bg-border" />
-        <div className="mx-auto mt-5 h-7 w-56 animate-pulse rounded-md bg-border" />
-        <div className="mt-8 h-64 animate-pulse rounded-xl bg-border" />
+        <div className="mx-auto h-14 w-14 animate-pulse rounded-full bg-border/70" />
+        <div className="mx-auto mt-5 h-7 w-56 animate-pulse rounded-md bg-border/70" />
+        <div className="mt-8 h-64 animate-pulse rounded-xl bg-border/70" />
       </div>
     );
   }
@@ -200,7 +200,7 @@ export function AppointmentStatus({
             : 'This usually takes a few seconds. Please keep this page open.'}
         </p>
 
-        <div className="mt-8 rounded-xl border border-border bg-surface p-6 shadow-card">
+        <div className="mt-8 rounded-xl border border-border bg-surface p-6 shadow-lift">
           <ProgressSteps
             steps={CONFIRMING_STEPS}
             current={1}

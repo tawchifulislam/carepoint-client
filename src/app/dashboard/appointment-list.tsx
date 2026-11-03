@@ -15,7 +15,7 @@ import { NextAppointmentCard } from './next-appointment-card';
 const PAGE_SIZE = 50;
 const CANCELLATION_CUTOFF_MS = 2 * 60 * 60 * 1000;
 const ROW_BUTTON =
-  'rounded-sm border border-border px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:bg-paper';
+  'rounded-sm border border-border px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:border-primary/50 hover:bg-paper';
 const ROW_DANGER =
   'rounded-sm px-3 py-1.5 text-xs font-semibold text-red transition-colors hover:bg-red-tint';
 
@@ -160,7 +160,7 @@ export function AppointmentList() {
 
   if (loadError && items === null) {
     return (
-      <div className="mt-8 rounded-xl border border-border bg-surface px-6 py-12 text-center">
+      <div className="mt-8 rounded-xl border border-border bg-surface px-6 py-12 text-center shadow-card">
         <p className="font-semibold text-ink">
           Could not load your appointments
         </p>
@@ -170,7 +170,7 @@ export function AppointmentList() {
         <button
           type="button"
           onClick={loadFirstPage}
-          className="mt-5 rounded-sm bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+          className="mt-5 rounded-sm bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_18px_-8px_rgb(10_112_136/0.65)] transition hover:bg-primary-hover active:scale-[0.97]"
         >
           Try again
         </button>
@@ -181,10 +181,10 @@ export function AppointmentList() {
   if (items === null) {
     return (
       <div className="mt-8 space-y-6">
-        <div className="h-72 animate-pulse rounded-xl bg-border" />
+        <div className="h-72 animate-pulse rounded-xl bg-border/70" />
         <div className="space-y-2">
-          <div className="h-16 animate-pulse rounded-lg bg-border" />
-          <div className="h-16 animate-pulse rounded-lg bg-border" />
+          <div className="h-20 animate-pulse rounded-lg bg-border/70" />
+          <div className="h-20 animate-pulse rounded-lg bg-border/70" />
         </div>
       </div>
     );
@@ -192,14 +192,14 @@ export function AppointmentList() {
 
   if (items.length === 0) {
     return (
-      <div className="mt-8 rounded-xl border border-dashed border-border px-6 py-16 text-center">
+      <div className="mt-8 rounded-xl border border-dashed border-border bg-surface/60 px-6 py-16 text-center">
         <p className="text-lg font-semibold text-ink">No appointments yet</p>
         <p className="mt-1 text-sm text-ink-muted">
           Find a doctor and book your first visit.
         </p>
         <Link
           href="/doctors"
-          className="mt-6 inline-block rounded-sm bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+          className="mt-6 inline-block rounded-sm bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_18px_-8px_rgb(10_112_136/0.65)] transition hover:bg-primary-hover active:scale-[0.97]"
         >
           Find a doctor
         </Link>
@@ -218,7 +218,7 @@ export function AppointmentList() {
       {bannerMessage && (
         <p
           role="alert"
-          className="rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+          className="rounded-md border border-red/25 bg-red-tint px-4 py-3 text-sm text-red"
         >
           {bannerMessage}
         </p>
@@ -232,14 +232,14 @@ export function AppointmentList() {
           onCancel={() => setCancelTarget(next)}
         />
       ) : (
-        <div className="rounded-xl border border-dashed border-border px-6 py-12 text-center">
+        <div className="rounded-xl border border-dashed border-border bg-surface/60 px-6 py-12 text-center">
           <p className="font-semibold text-ink">No upcoming appointments</p>
           <p className="mt-1 text-sm text-ink-muted">
             Find a doctor and book your next visit.
           </p>
           <Link
             href="/doctors"
-            className="mt-5 inline-block rounded-sm bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+            className="mt-5 inline-block rounded-sm bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_18px_-8px_rgb(10_112_136/0.65)] transition hover:bg-primary-hover active:scale-[0.97]"
           >
             Find a doctor
           </Link>
@@ -248,8 +248,8 @@ export function AppointmentList() {
 
       {rest.length > 0 && (
         <section>
-          <h2 className="text-sm font-semibold text-ink-muted">
-            Also upcoming
+          <h2 className="font-mono text-xs font-semibold tracking-wide text-ink-muted">
+            ALSO UPCOMING
           </h2>
           <div className="mt-3 space-y-2">
             {rest.map(item => (
@@ -283,7 +283,7 @@ export function AppointmentList() {
 
       {history.length > 0 && (
         <details className="group">
-          <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg border border-border bg-surface px-5 py-4 text-sm font-semibold text-ink transition-colors hover:border-primary [&::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg border border-border bg-surface px-5 py-4 text-sm font-semibold text-ink shadow-card transition-colors hover:border-primary/40 [&::-webkit-details-marker]:hidden">
             <span>Past and cancelled</span>
             <span className="flex items-center gap-3">
               <span className="font-mono text-ink-muted">{historyTotal}</span>
@@ -313,7 +313,7 @@ export function AppointmentList() {
               type="button"
               onClick={loadMore}
               disabled={loadingMore}
-              className="mt-4 rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary disabled:opacity-50"
+              className="mt-4 rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary/50 disabled:opacity-50"
             >
               {loadingMore ? 'Loading...' : 'Show older appointments'}
             </button>

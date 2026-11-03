@@ -17,7 +17,7 @@ export function TabNav({ label, tabs }: { label: string; tabs: TabItem[] }) {
       aria-label={label}
       className="-mx-6 overflow-x-auto px-6 scrollbar-none [&::-webkit-scrollbar]:hidden"
     >
-      <ul className="flex min-w-max gap-1 border-b border-border">
+      <ul className="inline-flex min-w-max gap-1 rounded-lg border border-border bg-surface p-1 shadow-card">
         {tabs.map(tab => {
           const active = tab.exact
             ? pathname === tab.href
@@ -28,10 +28,10 @@ export function TabNav({ label, tabs }: { label: string; tabs: TabItem[] }) {
               <Link
                 href={tab.href}
                 aria-current={active ? 'page' : undefined}
-                className={`-mb-px inline-block border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${
+                className={`inline-block rounded-md px-4 py-2.5 text-sm font-semibold transition-colors ${
                   active
-                    ? 'border-primary text-primary'
-                    : 'border-transparent text-ink-muted hover:text-ink'
+                    ? 'bg-primary-tint text-primary-hover'
+                    : 'text-ink-muted hover:bg-paper hover:text-ink'
                 }`}
               >
                 {tab.label}

@@ -15,8 +15,9 @@ const LABELS: Record<ApprovalStatus, string> = {
 export function ApprovalBadge({ status }: { status: ApprovalStatus }) {
   return (
     <span
-      className={`rounded-full px-3 py-1 text-xs font-medium ${STYLES[status]}`}
+      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${STYLES[status]}`}
     >
+      <span className="h-1.5 w-1.5 rounded-full bg-current" />
       {LABELS[status]}
     </span>
   );

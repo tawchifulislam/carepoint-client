@@ -1,5 +1,6 @@
 'use client';
 
+import { Check, Lock } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const INITIAL_SLOTS = [
@@ -29,37 +30,58 @@ export function LiveScheduleCard() {
   }, []);
 
   return (
-    <div className="relative mt-6 rounded-xl border border-border bg-surface p-6 opacity-0 shadow-[0_20px_50px_rgb(18_29_40/0.08)] animate-rise [animation-delay:150ms] md:-ml-10 md:mt-10">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="text-sm font-semibold text-ink">
-          Dr. Amelia Hart
-          <span className="mt-0.5 block text-xs font-normal text-ink-muted">
-            Cardiology &middot; Riverside Clinic
+    <div className="relative rounded-xl border border-border bg-surface p-6 opacity-0 shadow-lift animate-rise [animation-delay:150ms]">
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-linear-to-br from-[#12a3b4] to-[#0a6478] text-sm font-semibold text-white"
+          >
+            AH
           </span>
+          <div className="text-sm font-semibold text-ink">
+            Dr. Amelia Hart
+            <span className="mt-0.5 block text-xs font-normal text-ink-muted">
+              Cardiology &middot; Riverside Clinic
+            </span>
+          </div>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-primary-hover">
-          <span className="h-1.75 w-1.75 rounded-full bg-primary animate-pulse-soft" />
+        <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-mint-tint px-2.5 py-1 text-[11px] font-semibold text-primary-hover">
+          <span className="h-1.75 w-1.75 rounded-full bg-mint animate-pulse-soft" />
           LIVE PREVIEW
         </div>
       </div>
 
-      {slots.map(slot => (
-        <div
-          key={slot.time}
-          className={`mb-1.5 flex items-center justify-between rounded-md px-3 py-2.5 text-[13px] transition-colors duration-500 ${
-            slot.open ? 'bg-primary-tint' : 'bg-paper text-ink-muted'
-          }`}
-        >
-          <span className="font-mono font-medium">{slot.time}</span>
-          <span
-            className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition-colors duration-500 ${
-              slot.open ? 'bg-primary text-white' : 'bg-border text-ink-muted'
+      <div className="space-y-2">
+        {slots.map(slot => (
+          <div
+            key={slot.time}
+            className={`flex items-center justify-between rounded-md border px-4 py-3 text-[13px] transition-colors duration-500 ${
+              slot.open
+                ? 'border-primary/20 bg-primary-tint/70'
+                : 'border-transparent bg-paper text-ink-muted'
             }`}
           >
-            {slot.open ? 'OPEN' : 'BOOKED'}
-          </span>
-        </div>
-      ))}
+            <span className="font-mono font-medium">{slot.time}</span>
+            <span
+              className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition-colors duration-500 ${
+                slot.open ? 'bg-primary text-white' : 'bg-border text-ink-muted'
+              }`}
+            >
+              {slot.open ? (
+                <Check className="h-3 w-3" />
+              ) : (
+                <Lock className="h-3 w-3" />
+              )}
+              {slot.open ? 'OPEN' : 'BOOKED'}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-4 border-t border-border pt-4 text-xs text-ink-muted">
+        Open times come straight from the doctor&apos;s calendar.
+      </p>
     </div>
   );
 }

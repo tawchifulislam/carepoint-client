@@ -15,7 +15,7 @@ export default function DoctorAppointmentsPage() {
   return (
     <div>
       <div
-        className="inline-flex rounded-md border border-border bg-surface p-1"
+        className="inline-flex rounded-lg border border-border bg-surface p-1 shadow-card"
         role="group"
         aria-label="Appointment view"
       >
@@ -25,9 +25,9 @@ export default function DoctorAppointmentsPage() {
             key={item.id}
             onClick={() => setView(item.id)}
             aria-pressed={view === item.id}
-            className={`rounded-sm px-5 py-2 text-sm font-semibold transition-colors ${
+            className={`rounded-md px-5 py-2 text-sm font-semibold transition-colors ${
               view === item.id
-                ? 'bg-primary text-white'
+                ? 'bg-primary text-white shadow-[0_6px_14px_-6px_rgb(10_112_136/0.6)]'
                 : 'text-ink-muted hover:text-ink'
             }`}
           >

@@ -20,9 +20,9 @@ import { DoctorAppointmentRow } from './doctor-appointment-row';
 const LIST_PATH = '/api/doctors/me/appointments?scope=schedule&pageSize=50';
 
 const SMALL_PRIMARY =
-  'rounded-sm bg-primary px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-primary-hover active:scale-[0.97] disabled:opacity-50';
+  'rounded-sm bg-primary px-3 py-1.5 text-xs font-semibold text-white shadow-[0_6px_14px_-6px_rgb(10_112_136/0.6)] transition hover:bg-primary-hover active:scale-[0.97] disabled:opacity-50';
 const SMALL_SECONDARY =
-  'rounded-sm border border-border px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:bg-paper disabled:opacity-50';
+  'rounded-sm border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:border-primary/50 hover:bg-paper disabled:opacity-50';
 const SMALL_DANGER =
   'rounded-sm px-3 py-1.5 text-xs font-semibold text-red transition-colors hover:bg-red-tint disabled:opacity-50';
 
@@ -172,7 +172,7 @@ export function ScheduleView() {
 
   if (error && items === null) {
     return (
-      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center">
+      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center shadow-card">
         <p className="font-semibold text-ink">Could not load your schedule</p>
         <p className="mt-1 text-sm text-ink-muted">
           Check your connection and try again.
@@ -191,16 +191,16 @@ export function ScheduleView() {
   if (items === null) {
     return (
       <div className="space-y-2">
-        <div className="h-16 animate-pulse rounded-lg bg-border" />
-        <div className="h-16 animate-pulse rounded-lg bg-border" />
-        <div className="h-16 animate-pulse rounded-lg bg-border" />
+        <div className="h-16 animate-pulse rounded-lg bg-border/70" />
+        <div className="h-16 animate-pulse rounded-lg bg-border/70" />
+        <div className="h-16 animate-pulse rounded-lg bg-border/70" />
       </div>
     );
   }
 
   if (items.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-border px-6 py-16 text-center">
+      <div className="rounded-xl border border-dashed border-border bg-surface/60 px-6 py-16 text-center">
         <p className="text-lg font-semibold text-ink">
           No upcoming appointments
         </p>
@@ -225,7 +225,7 @@ export function ScheduleView() {
       {(actionError || error) && (
         <div
           role="alert"
-          className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+          className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-red/25 bg-red-tint px-4 py-3 text-sm text-red"
         >
           <p>{actionError ?? 'Could not refresh your schedule.'}</p>
           <button
@@ -280,7 +280,7 @@ export function ScheduleView() {
             aria-label={relative ?? formatDayLabel(dateKey)}
           >
             <div className="flex items-baseline justify-between">
-              <h2 className="text-sm font-semibold text-ink">
+              <h2 className="text-base font-semibold text-ink">
                 {relative ?? formatDayLabel(dateKey)}
                 {relative && (
                   <span className="ml-2 font-normal text-ink-muted">
@@ -312,7 +312,7 @@ export function ScheduleView() {
           type="button"
           onClick={loadMore}
           disabled={loadingMore}
-          className="rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary disabled:opacity-50"
+          className="rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary/50 disabled:opacity-50"
         >
           {loadingMore ? 'Loading...' : 'Show more'}
         </button>

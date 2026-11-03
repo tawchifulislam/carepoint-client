@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ApplicationGate } from '@/components/application-gate';
+import { PageHeader } from '@/components/page-header';
 import { DoctorApplicationForm } from './doctor-application-form';
 
 export const metadata: Metadata = { title: 'Apply as a doctor | CarePoint' };
@@ -8,13 +9,11 @@ export const metadata: Metadata = { title: 'Apply as a doctor | CarePoint' };
 export default function DoctorOnboardingPage() {
   return (
     <>
-      <h1 className="text-3xl font-bold tracking-tight text-ink">
-        Apply as a doctor
-      </h1>
-      <p className="mt-2 text-ink-muted">
-        Choose the clinic you work with. Its administrator reviews your
-        application before you can take bookings.
-      </p>
+      <PageHeader
+        eyebrow="FOR DOCTORS"
+        title="Apply as a doctor"
+        description="Choose the clinic you work with. Its administrator reviews your application before you can take bookings."
+      />
 
       <div className="mt-8">
         <ApplicationGate>

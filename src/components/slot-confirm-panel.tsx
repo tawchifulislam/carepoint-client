@@ -87,8 +87,10 @@ export function SlotConfirmPanel({
 
   return (
     <>
-      <div className="sticky top-24 hidden h-fit rounded-lg border border-border bg-surface p-6 md:block">
-        <h3 className="text-sm font-semibold text-ink">{heading}</h3>
+      <div className="sticky top-24 hidden h-fit rounded-xl border border-border bg-surface p-6 shadow-card md:block">
+        <h3 className="font-mono text-xs font-semibold uppercase tracking-wide text-primary-hover">
+          {heading}
+        </h3>
 
         {!hasSelection ? (
           <p className="mt-3 text-sm text-ink-muted">{emptyText}</p>
@@ -105,13 +107,13 @@ export function SlotConfirmPanel({
         <button
           type="button"
           onClick={() => setSheetOpen(true)}
-          className="fixed inset-x-4 bottom-4 z-30 flex items-center justify-between rounded-lg bg-primary px-5 py-3.5 text-white shadow-card md:hidden"
+          className="fixed inset-x-4 bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] z-30 flex items-center justify-between rounded-lg bg-primary px-5 py-3.5 text-white shadow-lift md:hidden"
         >
           <span className="text-sm">
             Selected &middot;{' '}
             <span className="font-mono font-semibold">{barLabel}</span>
           </span>
-          <span className="rounded-sm bg-white/20 px-3 py-1.5 text-xs font-semibold">
+          <span className="rounded-sm bg-white/20 px-3 py-1.5 text-xs font-semibold backdrop-blur">
             {barAction}
           </span>
         </button>
@@ -124,13 +126,13 @@ export function SlotConfirmPanel({
             tabIndex={-1}
             aria-label="Close summary"
             onClick={() => setSheetOpen(false)}
-            className="fixed inset-0 z-40 cursor-default bg-ink/40 md:hidden"
+            className="fixed inset-0 z-40 cursor-default bg-ink/50 backdrop-blur-[2px] md:hidden"
           />
           <div
             role="dialog"
             aria-modal="true"
             aria-label={sheetHeading}
-            className="fixed inset-x-0 bottom-0 z-50 rounded-t-xl bg-surface p-6 pb-[calc(env(safe-area-inset-bottom,0px)+24px)] md:hidden"
+            className="fixed inset-x-0 bottom-0 z-50 rounded-t-xl bg-surface p-6 pb-[calc(env(safe-area-inset-bottom,0px)+24px)] shadow-lift animate-in slide-in-from-bottom-8 duration-200 md:hidden"
           >
             <div className="mx-auto mb-4 h-1 w-9 rounded-full bg-border" />
             <h3 className="text-base font-semibold text-ink">{sheetHeading}</h3>

@@ -19,15 +19,16 @@ const FILTERS: { id: Filter; label: string }[] = [
 ];
 
 const CHIP_BASE =
-  'shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors';
-const CHIP_ACTIVE = 'border-primary bg-primary text-white';
+  'shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition';
+const CHIP_ACTIVE =
+  'border-primary bg-primary text-white shadow-[0_6px_14px_-6px_rgb(10_112_136/0.6)]';
 const CHIP_IDLE =
-  'border-border bg-surface text-ink hover:border-primary hover:text-primary-hover';
+  'border-border bg-surface text-ink hover:border-primary/50 hover:text-primary-hover';
 
 const SMALL_PRIMARY =
-  'rounded-sm bg-primary px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-primary-hover active:scale-[0.97] disabled:opacity-50';
+  'rounded-sm bg-primary px-3 py-1.5 text-xs font-semibold text-white shadow-[0_6px_14px_-6px_rgb(10_112_136/0.6)] transition hover:bg-primary-hover active:scale-[0.97] disabled:opacity-50';
 const SMALL_SECONDARY =
-  'rounded-sm border border-border px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:bg-paper disabled:opacity-50';
+  'rounded-sm border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:border-primary/50 hover:bg-paper disabled:opacity-50';
 const SMALL_DANGER =
   'rounded-sm px-3 py-1.5 text-xs font-semibold text-red transition-colors hover:bg-red-tint disabled:opacity-50';
 
@@ -174,7 +175,7 @@ export function ReviewQueue<T extends ReviewItem>({
       {actionError && (
         <p
           role="alert"
-          className="mt-4 rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+          className="mt-4 rounded-md border border-red/25 bg-red-tint px-4 py-3 text-sm text-red"
         >
           {actionError}
         </p>
@@ -182,7 +183,7 @@ export function ReviewQueue<T extends ReviewItem>({
 
       <div className="mt-4">
         {error && items === null && (
-          <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center">
+          <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center shadow-card">
             <p className="font-semibold text-ink">Could not load this list</p>
             <p className="mt-1 text-sm text-ink-muted">
               Check your connection and try again.
@@ -199,14 +200,14 @@ export function ReviewQueue<T extends ReviewItem>({
 
         {!error && items === null && (
           <div className="space-y-2">
-            <div className="h-20 animate-pulse rounded-lg bg-border" />
-            <div className="h-20 animate-pulse rounded-lg bg-border" />
-            <div className="h-20 animate-pulse rounded-lg bg-border" />
+            <div className="h-20 animate-pulse rounded-lg bg-border/70" />
+            <div className="h-20 animate-pulse rounded-lg bg-border/70" />
+            <div className="h-20 animate-pulse rounded-lg bg-border/70" />
           </div>
         )}
 
         {items !== null && items.length === 0 && (
-          <div className="rounded-xl border border-dashed border-border px-6 py-14 text-center">
+          <div className="rounded-xl border border-dashed border-border bg-surface/60 px-6 py-14 text-center">
             <p className="text-ink">{emptyText}</p>
           </div>
         )}
@@ -219,7 +220,7 @@ export function ReviewQueue<T extends ReviewItem>({
               return (
                 <li
                   key={item.id}
-                  className="flex flex-col gap-4 rounded-lg border border-border bg-surface px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-4 rounded-lg border border-border bg-surface p-4 shadow-card transition-colors hover:border-primary/30 sm:flex-row sm:items-center sm:justify-between sm:px-5"
                 >
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-3">
@@ -231,7 +232,7 @@ export function ReviewQueue<T extends ReviewItem>({
                     <p className="mt-0.5 text-sm text-ink-muted">
                       {info.subtitle}
                     </p>
-                    <p className="mt-0.5 text-xs text-ink-muted">
+                    <p className="mt-0.5 break-words text-xs text-ink-muted">
                       {info.detail} &middot; Applied{' '}
                       {formatSlotDate(item.createdAt)}
                     </p>
@@ -264,7 +265,7 @@ export function ReviewQueue<T extends ReviewItem>({
             type="button"
             onClick={loadMore}
             disabled={loadingMore}
-            className="mt-4 rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary disabled:opacity-50"
+            className="mt-4 rounded-sm border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary/50 disabled:opacity-50"
           >
             {loadingMore ? 'Loading...' : 'Show more'}
           </button>

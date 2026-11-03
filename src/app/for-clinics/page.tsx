@@ -54,8 +54,12 @@ const STEPS = [
 export default function ForClinicsPage() {
   return (
     <>
-      <section className="border-b border-border">
-        <Container className="py-20 md:py-28">
+      <section className="relative overflow-hidden border-b border-border">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_60%_90%_at_85%_0%,#000_20%,transparent_70%)]"
+        />
+        <Container className="relative py-20 md:py-28">
           <p className="font-mono text-xs font-semibold tracking-wide text-primary-hover">
             FOR CLINICS
           </p>
@@ -80,10 +84,15 @@ export default function ForClinicsPage() {
       </section>
 
       <section className="border-b border-border">
-        <Container className="grid gap-10 py-16 md:grid-cols-3 md:gap-12">
+        <Container className="grid gap-5 py-16 md:grid-cols-3">
           {BENEFITS.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="border-t-2 border-primary pt-5">
-              <Icon className="h-5 w-5 text-primary" />
+            <div
+              key={title}
+              className="rounded-lg border border-border bg-surface p-6 shadow-card"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-md bg-primary-tint">
+                <Icon className="h-5 w-5 text-primary" />
+              </span>
               <h2 className="mt-4 text-lg font-semibold text-ink">{title}</h2>
               <p className="mt-2 text-sm text-ink-muted">{body}</p>
             </div>

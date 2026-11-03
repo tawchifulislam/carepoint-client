@@ -78,7 +78,7 @@ export function SlotPicker({
 
   return (
     <div className="grid gap-10 md:grid-cols-[1fr_320px]">
-      <div>
+      <div className="min-w-0">
         <SlotSelector
           doctorId={doctorId}
           selectedStart={selection?.slot.start ?? null}
@@ -103,6 +103,7 @@ export function SlotPicker({
         barLabel={selection ? formatSlotTime(selection.slot.start) : null}
         barAction="Review & Pay"
         rows={rows}
+        note="Your slot is held for 30 minutes while you pay securely online."
         confirmLabel="Confirm & Pay"
         confirmingLabel="Processing..."
         confirming={confirming}

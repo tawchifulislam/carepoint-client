@@ -14,7 +14,7 @@ import { dhakaDateKey, formatDayLabel } from '@/lib/format';
 import { formatMoney } from '@/lib/money';
 import type { DashboardPoint, DashboardRange } from '@/types/admin';
 
-const COLORS = { primary: '#0C7489', border: '#E2E8EB', muted: '#5E6F7A' };
+const COLORS = { primary: '#0A7088', border: '#DCE6EC', muted: '#4F6573' };
 const RANGE_LENGTH: Record<Exclude<DashboardRange, 'all'>, number> = {
   '7d': 7,
   '30d': 30,
@@ -61,7 +61,7 @@ function ChartTooltip({
   }
 
   return (
-    <div className="rounded-md border border-border bg-surface px-3 py-2 text-xs shadow-card">
+    <div className="rounded-md border border-border bg-surface px-3 py-2 text-xs shadow-lift">
       <p className="font-semibold text-ink">{formatDayLabel(point.date)}</p>
       <p className="mt-1 font-mono text-ink-muted">
         {formatMoney(point.revenue)} &middot; {point.bookings}{' '}
@@ -82,7 +82,7 @@ export function RevenueChart({
 
   if (!data.some(point => point.revenue > 0)) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-md border border-dashed border-border text-sm text-ink-muted">
+      <div className="flex h-64 items-center justify-center rounded-lg border border-dashed border-border bg-paper/60 text-sm text-ink-muted">
         No revenue in this period.
       </div>
     );

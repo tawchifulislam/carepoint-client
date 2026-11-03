@@ -75,7 +75,7 @@ export function SignInForm({
       {passwordReset && (
         <p
           role="status"
-          className="mt-6 rounded-md border border-primary bg-primary-tint px-4 py-3 text-sm text-primary-hover"
+          className="mt-6 rounded-md border border-primary/25 bg-primary-tint px-4 py-3 text-sm text-primary-hover"
         >
           Your password was updated. Sign in with the new one.
         </p>
@@ -119,7 +119,7 @@ export function SignInForm({
           {serverError && (
             <p
               role="alert"
-              className="rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+              className="rounded-md border border-red/25 bg-red-tint px-4 py-3 text-sm text-red"
             >
               {serverError}
             </p>
@@ -128,7 +128,7 @@ export function SignInForm({
           <button
             type="submit"
             disabled={busy}
-            className="w-full rounded-md bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-hover active:scale-[0.99] disabled:opacity-60"
+            className="w-full rounded-md bg-primary px-4 py-3 text-sm font-semibold text-white shadow-[0_8px_18px_-8px_rgb(10_112_136/0.65)] transition hover:bg-primary-hover active:scale-[0.99] disabled:opacity-60"
           >
             {busy ? 'Signing in...' : 'Sign in'}
           </button>

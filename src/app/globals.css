@@ -3,14 +3,19 @@
 @import "shadcn/tailwind.css";
 
 @theme {
-  --color-paper: #f6f8f9;
+  --color-paper: #f4f8fa;
   --color-surface: #ffffff;
-  --color-ink: #121d28;
-  --color-ink-muted: #5e6f7a;
-  --color-border: #e2e8eb;
-  --color-primary: #0c7489;
-  --color-primary-hover: #084f5c;
-  --color-primary-tint: #e3f2f4;
+  --color-ink: #0a1a25;
+  --color-ink-muted: #4f6573;
+  --color-border: #dce6ec;
+  --color-primary: #0a7088;
+  --color-primary-hover: #065366;
+  --color-primary-tint: #e2f3f6;
+  --color-primary-soft: #bfe3ea;
+  --color-mint: #12a58f;
+  --color-mint-tint: #dff6f0;
+  --color-night: #07202c;
+  --color-night-soft: #0d3445;
   --color-amber: #b8862f;
   --color-amber-tint: #fbf2e2;
   --color-red: #b4472e;
@@ -20,18 +25,21 @@
   --font-display: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
   --radius-lg: 18px;
-  --radius-xl: 20px;
+  --radius-xl: 24px;
 
   --shadow-card:
-    0 1px 2px rgb(18 29 40 / 0.04), 0 8px 24px rgb(18 29 40 / 0.05);
+    0 1px 2px rgb(10 26 37 / 0.04), 0 10px 28px -8px rgb(10 26 37 / 0.08);
+  --shadow-lift:
+    0 2px 4px rgb(10 26 37 / 0.04), 0 24px 56px -16px rgb(10 112 136 / 0.28);
 
   --animate-rise: rise 700ms ease forwards;
   --animate-marquee: marquee 40s linear infinite;
   --animate-pulse-soft: pulse-soft 1.8s ease-in-out infinite;
   --animate-pop: pop 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  --animate-float: float 6s ease-in-out infinite;
 
   @keyframes rise {
     from {
@@ -73,6 +81,79 @@
       transform: scale(1);
     }
   }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+}
+
+/* Fine line grid used behind hero sections */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(10 112 136 / 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(10 112 136 / 0.09) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Same grid for dark panels */
+@utility bg-grid-dark {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+@utility text-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-primary) 5%,
+    #12a3b4 55%,
+    var(--color-mint) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgb(10 112 136 / 0.2);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
 }
 
 :root {
@@ -82,6 +163,18 @@
 body {
 	font-size: 1rem;
 	line-height: 1.6;
+	background-image:
+		radial-gradient(
+			900px 380px at 92% -60px,
+			rgb(10 112 136 / 0.07),
+			transparent 65%
+		),
+		radial-gradient(
+			700px 320px at 0% 0px,
+			rgb(18 165 143 / 0.05),
+			transparent 60%
+		);
+	background-repeat: no-repeat;
 }
 
 @media (prefers-reduced-motion: reduce) {

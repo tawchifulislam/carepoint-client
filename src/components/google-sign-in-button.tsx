@@ -12,7 +12,7 @@ export function GoogleSignInButton({ next }: { next: string }) {
           callbackURL: `${window.location.origin}${next}`,
         })
       }
-      className="flex w-full items-center justify-center gap-3 rounded-md border border-border bg-surface px-4 py-3 text-sm font-semibold text-ink transition-colors hover:border-primary hover:bg-paper active:scale-[0.99]"
+      className="flex w-full items-center justify-center gap-3 rounded-md border border-border bg-surface px-4 py-3 text-sm font-semibold text-ink shadow-[0_1px_2px_rgb(10_26_37/0.04)] transition hover:border-primary/50 hover:bg-paper active:scale-[0.99]"
     >
       <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
         <path

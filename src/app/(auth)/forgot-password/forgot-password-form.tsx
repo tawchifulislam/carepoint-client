@@ -92,7 +92,7 @@ export function ForgotPasswordForm() {
         {serverError && (
           <p
             role="alert"
-            className="mt-5 rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+            className="mt-5 rounded-md border border-red/25 bg-red-tint px-4 py-3 text-sm text-red"
           >
             {serverError}
           </p>
@@ -102,7 +102,7 @@ export function ForgotPasswordForm() {
           type="button"
           onClick={resend}
           disabled={cooldown > 0 || resending}
-          className="mt-6 rounded-md border border-border bg-surface px-4 py-3 text-sm font-semibold text-ink transition-colors hover:border-primary disabled:opacity-60"
+          className="mt-6 rounded-md border border-border bg-surface px-4 py-3 text-sm font-semibold text-ink shadow-[0_1px_2px_rgb(10_26_37/0.04)] transition-colors hover:border-primary/50 disabled:opacity-60"
         >
           {resending
             ? 'Sending...'
@@ -151,7 +151,7 @@ export function ForgotPasswordForm() {
         {serverError && (
           <p
             role="alert"
-            className="rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+            className="rounded-md border border-red/25 bg-red-tint px-4 py-3 text-sm text-red"
           >
             {serverError}
           </p>

@@ -1,6 +1,12 @@
 'use client';
 
-import { AlertCircle, ArrowLeft, Clock, XCircle } from 'lucide-react';
+import {
+  AlertCircle,
+  ArrowLeft,
+  CalendarClock,
+  Clock,
+  XCircle,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -135,10 +141,10 @@ export function ReschedulePicker({ appointmentId }: { appointmentId: string }) {
   if (!appointment) {
     return (
       <div className="space-y-4">
-        <div className="h-5 w-40 animate-pulse rounded-md bg-border" />
-        <div className="h-10 w-72 animate-pulse rounded-md bg-border" />
-        <div className="h-20 animate-pulse rounded-lg bg-border" />
-        <div className="h-64 animate-pulse rounded-lg bg-border" />
+        <div className="h-5 w-40 animate-pulse rounded-md bg-border/70" />
+        <div className="h-10 w-72 animate-pulse rounded-md bg-border/70" />
+        <div className="h-20 animate-pulse rounded-lg bg-border/70" />
+        <div className="h-64 animate-pulse rounded-lg bg-border/70" />
       </div>
     );
   }
@@ -227,7 +233,7 @@ export function ReschedulePicker({ appointmentId }: { appointmentId: string }) {
     <div>
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-1.5 text-sm text-ink-muted transition-colors hover:text-ink"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-muted transition-colors hover:text-primary"
       >
         <ArrowLeft className="h-4 w-4" />
         Your appointments
@@ -241,12 +247,17 @@ export function ReschedulePicker({ appointmentId }: { appointmentId: string }) {
         is released once you confirm.
       </p>
 
-      <div className="mt-8 flex flex-col gap-1 rounded-lg border border-border bg-surface px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-xs text-ink-muted">Currently booked</p>
-          <p className="mt-0.5 font-mono text-sm font-semibold text-ink">
-            {currentLabel}
-          </p>
+      <div className="mt-8 flex flex-col gap-3 rounded-lg border border-border bg-surface p-5 shadow-card sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary-tint text-primary">
+            <CalendarClock className="h-5 w-5" />
+          </span>
+          <div>
+            <p className="text-xs text-ink-muted">Currently booked</p>
+            <p className="mt-0.5 font-mono text-sm font-semibold text-ink">
+              {currentLabel}
+            </p>
+          </div>
         </div>
         <p className="text-sm text-ink-muted">
           {appointment.doctor.specialty} &middot;{' '}
@@ -255,7 +266,7 @@ export function ReschedulePicker({ appointmentId }: { appointmentId: string }) {
       </div>
 
       <div className="mt-10 grid gap-10 md:grid-cols-[1fr_320px]">
-        <div>
+        <div className="min-w-0">
           <SlotSelector
             doctorId={appointment.doctorId}
             selectedStart={selection?.slot.start ?? null}

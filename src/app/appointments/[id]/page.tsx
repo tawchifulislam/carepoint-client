@@ -19,7 +19,7 @@ export default async function AppointmentPage({
   const { status } = await searchParams;
 
   return (
-    <Container className="py-14">
+    <Container className="py-10 md:py-14">
       <ProtectedRoute>
         <AppointmentStatus appointmentId={id} justPaid={status === 'success'} />
       </ProtectedRoute>

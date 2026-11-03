@@ -134,7 +134,7 @@ export function AddWindowForm({ onAdded }: { onAdded: () => void }) {
     <form
       onSubmit={onSubmit}
       noValidate
-      className="space-y-5 rounded-xl border border-border bg-surface p-6 shadow-card"
+      className="space-y-5 rounded-xl border border-border bg-surface p-6 shadow-lift"
     >
       <h2 className="text-base font-semibold text-ink">Add a window</h2>
 
@@ -151,10 +151,10 @@ export function AddWindowForm({ onAdded }: { onAdded: () => void }) {
                 onClick={() => toggleDay(day)}
                 aria-pressed={active}
                 aria-label={WEEKDAYS[day]}
-                className={`rounded-md border px-3 py-2 text-sm font-medium transition-colors ${
+                className={`rounded-md border px-3 py-2.5 text-sm font-medium transition ${
                   active
-                    ? 'border-primary bg-primary text-white'
-                    : 'border-border bg-surface text-ink hover:border-primary'
+                    ? 'border-primary bg-primary text-white shadow-[0_6px_14px_-6px_rgb(10_112_136/0.6)]'
+                    : 'border-border bg-surface text-ink hover:border-primary/50 hover:bg-primary-tint'
                 }`}
               >
                 {label}

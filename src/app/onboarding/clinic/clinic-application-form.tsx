@@ -76,7 +76,7 @@ export function ClinicApplicationForm() {
       {serverError && (
         <p
           role="alert"
-          className="rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+          className="rounded-md border border-red/25 bg-red-tint px-4 py-3 text-sm text-red"
         >
           {serverError}
         </p>

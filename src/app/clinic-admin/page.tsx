@@ -1,5 +1,6 @@
 'use client';
 
+import { CalendarCheck, DollarSign, Stethoscope } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MetricCard } from '@/components/metric-card';
@@ -53,7 +54,7 @@ export default function ClinicOverviewPage() {
 
   if (loadError && dashboard === null) {
     return (
-      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center">
+      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center shadow-card">
         <p className="font-semibold text-ink">Could not load your dashboard</p>
         <p className="mt-1 text-sm text-ink-muted">
           Check your connection and try again.
@@ -72,13 +73,13 @@ export default function ClinicOverviewPage() {
   if (dashboard === null) {
     return (
       <div className="space-y-6">
-        <div className="h-8 w-64 animate-pulse rounded-md bg-border" />
+        <div className="h-8 w-64 animate-pulse rounded-md bg-border/70" />
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="h-28 animate-pulse rounded-lg bg-border" />
-          <div className="h-28 animate-pulse rounded-lg bg-border" />
-          <div className="h-28 animate-pulse rounded-lg bg-border" />
+          <div className="h-28 animate-pulse rounded-lg bg-border/70" />
+          <div className="h-28 animate-pulse rounded-lg bg-border/70" />
+          <div className="h-28 animate-pulse rounded-lg bg-border/70" />
         </div>
-        <div className="h-72 animate-pulse rounded-xl bg-border" />
+        <div className="h-72 animate-pulse rounded-xl bg-border/70" />
       </div>
     );
   }
@@ -93,14 +94,14 @@ export default function ClinicOverviewPage() {
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-ink">
+          <h2 className="text-xl font-semibold tracking-tight text-ink">
             {dashboard.clinicName}
           </h2>
           <p className="mt-0.5 text-sm text-ink-muted">{dashboard.address}</p>
         </div>
 
         <div
-          className="inline-flex self-start rounded-md border border-border bg-surface p-1"
+          className="inline-flex max-w-full self-start overflow-x-auto rounded-lg border border-border bg-surface p-1 shadow-card scrollbar-none [&::-webkit-scrollbar]:hidden"
           role="group"
           aria-label="Date range"
         >
@@ -110,9 +111,9 @@ export default function ClinicOverviewPage() {
               key={item.id}
               onClick={() => setRange(item.id)}
               aria-pressed={range === item.id}
-              className={`rounded-sm px-4 py-2 text-sm font-semibold transition-colors ${
+              className={`shrink-0 rounded-md px-3 py-2 text-sm font-semibold transition-colors sm:px-4 ${
                 range === item.id
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary text-white shadow-[0_6px_14px_-6px_rgb(10_112_136/0.6)]'
                   : 'text-ink-muted hover:text-ink'
               }`}
             >
@@ -123,7 +124,7 @@ export default function ClinicOverviewPage() {
       </div>
 
       {pendingDoctors > 0 && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber bg-amber-tint px-5 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber/30 bg-amber-tint px-5 py-4">
           <p className="text-sm text-ink">
             {pendingDoctors}{' '}
             {pendingDoctors === 1 ? 'doctor is' : 'doctors are'} waiting for
@@ -144,20 +145,26 @@ export default function ClinicOverviewPage() {
         <div className="grid gap-4 sm:grid-cols-3">
           <MetricCard
             label="Revenue"
+            icon={DollarSign}
             value={formatMoney(dashboard.totals.revenue)}
           />
-          <MetricCard label="Bookings" value={dashboard.totals.bookings} />
+          <MetricCard
+            label="Bookings"
+            icon={CalendarCheck}
+            value={dashboard.totals.bookings}
+          />
           <MetricCard
             label="Active doctors"
+            icon={Stethoscope}
             value={dashboard.totals.activeDoctors}
           />
         </div>
 
         <section
-          className="rounded-xl border border-border bg-surface p-6"
+          className="rounded-xl border border-border bg-surface p-5 shadow-card sm:p-6"
           aria-labelledby="revenue-heading"
         >
-          <h3 id="revenue-heading" className="text-sm font-semibold text-ink">
+          <h3 id="revenue-heading" className="text-base font-semibold text-ink">
             Revenue by day
           </h3>
           <div className="mt-4">
@@ -166,10 +173,10 @@ export default function ClinicOverviewPage() {
         </section>
 
         <section
-          className="rounded-xl border border-border bg-surface p-6"
+          className="rounded-xl border border-border bg-surface p-5 shadow-card sm:p-6"
           aria-labelledby="doctors-heading"
         >
-          <h3 id="doctors-heading" className="text-sm font-semibold text-ink">
+          <h3 id="doctors-heading" className="text-base font-semibold text-ink">
             Doctors
           </h3>
 
@@ -205,7 +212,7 @@ export default function ClinicOverviewPage() {
                       aria-hidden="true"
                     >
                       <div
-                        className="h-2 rounded-full bg-primary"
+                        className="h-2 rounded-full bg-linear-to-r from-[#12a3b4] to-primary"
                         style={{ width: `${share}%` }}
                       />
                     </div>

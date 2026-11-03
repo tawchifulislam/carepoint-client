@@ -16,7 +16,7 @@ export default async function ReschedulePage({
   const { id } = await params;
 
   return (
-    <Container className="py-14">
+    <Container className="py-10 md:py-14">
       <ProtectedRoute>
         <ReschedulePicker appointmentId={id} />
       </ProtectedRoute>

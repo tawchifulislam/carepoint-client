@@ -10,7 +10,7 @@ export default function OnboardingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Container className="py-14">
+    <Container className="py-10 md:py-14">
       <ProtectedRoute>
         <div className="mx-auto w-full max-w-xl">{children}</div>
       </ProtectedRoute>

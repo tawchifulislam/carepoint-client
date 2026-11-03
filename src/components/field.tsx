@@ -17,10 +17,10 @@ interface FieldProps {
 }
 
 export function controlClass(hasError: boolean): string {
-  return `w-full rounded-md border bg-surface px-4 py-3 text-sm text-ink transition-colors placeholder:text-ink-muted focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60 ${
+  return `w-full rounded-md border bg-surface px-4 py-3 text-base text-ink shadow-[0_1px_2px_rgb(10_26_37/0.04)] transition placeholder:text-ink-muted/80 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-60 sm:text-sm ${
     hasError
-      ? 'border-red focus:border-red focus:ring-red/20'
-      : 'border-border focus:border-primary focus:ring-primary/20'
+      ? 'border-red focus:border-red focus:ring-red/15'
+      : 'border-border hover:border-primary/40 focus:border-primary focus:ring-primary/15'
   }`;
 }
 

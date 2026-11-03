@@ -1,5 +1,12 @@
 'use client';
 
+import {
+  Building2,
+  CalendarCheck,
+  DollarSign,
+  Stethoscope,
+  Users,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { MetricCard } from '@/components/metric-card';
@@ -34,7 +41,7 @@ export default function SuperAdminOverviewPage() {
 
   if (loadError && metrics === null) {
     return (
-      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center">
+      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center shadow-card">
         <p className="font-semibold text-ink">
           Could not load platform metrics
         </p>
@@ -58,7 +65,7 @@ export default function SuperAdminOverviewPage() {
         {Array.from({ length: 6 }, (_, index) => (
           <div
             key={index}
-            className="h-28 animate-pulse rounded-lg bg-border"
+            className="h-28 animate-pulse rounded-lg bg-border/70"
           />
         ))}
       </div>
@@ -72,7 +79,7 @@ export default function SuperAdminOverviewPage() {
       {waiting > 0 && (
         <section
           aria-label="Needs review"
-          className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-amber bg-amber-tint px-5 py-4"
+          className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-amber/30 bg-amber-tint px-5 py-4"
         >
           <p className="text-sm font-semibold text-ink">Needs review</p>
           <div className="flex flex-wrap gap-5 text-sm">
@@ -99,16 +106,26 @@ export default function SuperAdminOverviewPage() {
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <MetricCard label="Approved clinics" value={metrics.approvedClinics} />
-        <MetricCard label="Approved doctors" value={metrics.approvedDoctors} />
-        <MetricCard label="Patients" value={metrics.patients} />
+        <MetricCard
+          label="Approved clinics"
+          icon={Building2}
+          value={metrics.approvedClinics}
+        />
+        <MetricCard
+          label="Approved doctors"
+          icon={Stethoscope}
+          value={metrics.approvedDoctors}
+        />
+        <MetricCard label="Patients" icon={Users} value={metrics.patients} />
         <MetricCard
           label="Bookings"
+          icon={CalendarCheck}
           value={metrics.totalBookings}
           hint="Booked and completed"
         />
         <MetricCard
           label="Revenue"
+          icon={DollarSign}
           value={formatMoney(metrics.totalRevenue)}
           hint="Successful payments, all time"
         />

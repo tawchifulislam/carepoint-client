@@ -127,7 +127,7 @@ export default function LeaveDaysPage() {
 
   if (loadError && days === null) {
     return (
-      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center">
+      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center shadow-card">
         <p className="font-semibold text-ink">Could not load your leave days</p>
         <p className="mt-1 text-sm text-ink-muted">
           Check your connection and try again.
@@ -146,14 +146,17 @@ export default function LeaveDaysPage() {
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_340px]">
       <section aria-labelledby="leave-heading">
-        <h2 id="leave-heading" className="text-sm font-semibold text-ink-muted">
-          Upcoming leave days
+        <h2
+          id="leave-heading"
+          className="font-mono text-xs font-semibold tracking-wide text-ink-muted"
+        >
+          UPCOMING LEAVE DAYS
         </h2>
 
         {banner && (
           <p
             role="alert"
-            className="mt-3 rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+            className="mt-3 rounded-md border border-red/25 bg-red-tint px-4 py-3 text-sm text-red"
           >
             {banner}
           </p>
@@ -161,11 +164,11 @@ export default function LeaveDaysPage() {
 
         {days === null ? (
           <div className="mt-4 space-y-2">
-            <div className="h-16 animate-pulse rounded-lg bg-border" />
-            <div className="h-16 animate-pulse rounded-lg bg-border" />
+            <div className="h-16 animate-pulse rounded-lg bg-border/70" />
+            <div className="h-16 animate-pulse rounded-lg bg-border/70" />
           </div>
         ) : days.length === 0 ? (
-          <div className="mt-4 rounded-xl border border-dashed border-border px-6 py-14 text-center">
+          <div className="mt-4 rounded-xl border border-dashed border-border bg-surface/60 px-6 py-14 text-center">
             <p className="text-ink">No upcoming leave days.</p>
             <p className="mt-1 text-sm text-ink-muted">
               Block a day when you are away and patients cannot book it.
@@ -176,7 +179,7 @@ export default function LeaveDaysPage() {
             {days.map(day => (
               <li
                 key={day.id}
-                className="flex items-center justify-between gap-3 rounded-lg border border-border bg-surface px-5 py-4"
+                className="flex items-center justify-between gap-3 rounded-lg border border-border bg-surface px-5 py-4 shadow-card"
               >
                 <div>
                   <p className="font-mono text-sm font-semibold text-ink">
@@ -204,7 +207,7 @@ export default function LeaveDaysPage() {
         <form
           onSubmit={handleSubmit(onSubmit)}
           noValidate
-          className="space-y-5 rounded-xl border border-border bg-surface p-6 shadow-card"
+          className="space-y-5 rounded-xl border border-border bg-surface p-6 shadow-lift"
         >
           <h2 className="text-base font-semibold text-ink">Block a day</h2>
 
@@ -220,7 +223,7 @@ export default function LeaveDaysPage() {
           {serverError && (
             <div
               role="alert"
-              className="rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+              className="rounded-md border border-red/25 bg-red-tint px-4 py-3 text-sm text-red"
             >
               <p>{serverError}</p>
               {bookingConflict && (

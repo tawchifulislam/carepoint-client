@@ -11,12 +11,13 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <LegalPage
+      eyebrow="CONTACT"
       title="Contact"
       intro="Have a question or some feedback about CarePoint? Here is how to reach us."
     >
       <a
         href={`mailto:${CONTACT_EMAIL}`}
-        className="flex items-center gap-4 rounded-xl border border-border bg-surface p-6 transition-colors hover:border-primary"
+        className="flex items-center gap-4 rounded-xl border border-border bg-surface p-6 shadow-card transition hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lift"
       >
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-tint text-primary">
           <Mail className="h-5 w-5" />

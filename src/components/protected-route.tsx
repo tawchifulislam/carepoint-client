@@ -25,7 +25,9 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
         aria-label="Loading"
         className="flex justify-center py-24"
       >
-        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-tint">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        </span>
       </div>
     );
   }

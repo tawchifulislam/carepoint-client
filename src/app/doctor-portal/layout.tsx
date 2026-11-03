@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Container } from '@/components/container';
+import { PageHeader } from '@/components/page-header';
 import { RequireRole } from '@/components/require-role';
 import { TabNav } from '@/components/tab-nav';
 
@@ -21,15 +22,14 @@ export default function DoctorPortalLayout({
 }) {
   return (
     <RequireRole requiredRole="DOCTOR">
-      <Container className="py-14">
-        <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
-          Doctor portal
-        </h1>
-        <p className="mt-2 text-ink-muted">
-          Manage your schedule, availability, and time off.
-        </p>
+      <Container className="py-10 md:py-14">
+        <PageHeader
+          eyebrow="YOUR WORKSPACE"
+          title="Doctor portal"
+          description="Manage your schedule, availability, and time off."
+        />
 
-        <div className="mt-8">
+        <div className="mt-7">
           <TabNav label="Doctor portal" tabs={TABS} />
         </div>
 

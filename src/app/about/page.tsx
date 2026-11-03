@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <LegalPage
+      eyebrow="ABOUT"
       title="About CarePoint"
       intro="CarePoint is a doctor appointment platform. Patients see which times are actually open, book one, and pay in a single step."
     >
@@ -62,12 +63,7 @@ export default function AboutPage() {
         </p>
       </LegalSection>
 
-      <LegalSection title="About this project">
-        <p>
-          CarePoint is a portfolio project built to show a complete booking
-          product from search to payment and back-office tools. In this demo,
-          payments run in Stripe&apos;s test mode, so no real money moves.
-        </p>
+      <LegalSection title="How it is built">
         <p>
           It is built with Next.js, React, and Tailwind CSS on the front end,
           and Express, PostgreSQL with Prisma, Better Auth, Stripe, and Resend

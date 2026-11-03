@@ -70,7 +70,7 @@ export default function AvailabilityPage() {
 
   if (loadError && rules === null) {
     return (
-      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center">
+      <div className="rounded-xl border border-border bg-surface px-6 py-12 text-center shadow-card">
         <p className="font-semibold text-ink">
           Could not load your availability
         </p>
@@ -93,32 +93,32 @@ export default function AvailabilityPage() {
       <section aria-labelledby="weekly-heading">
         <h2
           id="weekly-heading"
-          className="text-sm font-semibold text-ink-muted"
+          className="font-mono text-xs font-semibold tracking-wide text-ink-muted"
         >
-          Weekly schedule
+          WEEKLY SCHEDULE
         </h2>
 
         {banner && (
           <p
             role="alert"
-            className="mt-3 rounded-md border border-red bg-red-tint px-4 py-3 text-sm text-red"
+            className="mt-3 rounded-md border border-red/25 bg-red-tint px-4 py-3 text-sm text-red"
           >
             {banner}
           </p>
         )}
 
         {rules === null ? (
-          <div className="mt-4 h-96 animate-pulse rounded-xl bg-border" />
+          <div className="mt-4 h-96 animate-pulse rounded-xl bg-border/70" />
         ) : (
           <>
             {rules.length === 0 && (
-              <p className="mt-4 rounded-md border border-amber bg-amber-tint px-4 py-3 text-sm text-ink">
+              <p className="mt-4 rounded-md border border-amber/30 bg-amber-tint px-4 py-3 text-sm text-ink">
                 You have no availability yet. Patients cannot book you until you
                 add at least one window.
               </p>
             )}
 
-            <ul className="mt-4 rounded-xl border border-border bg-surface px-5">
+            <ul className="mt-4 rounded-xl border border-border bg-surface px-5 shadow-card">
               {WEEKDAYS.map((name, weekday) => {
                 const dayRules = rules.filter(rule => rule.weekday === weekday);
 
@@ -127,7 +127,7 @@ export default function AvailabilityPage() {
                     key={name}
                     className="flex gap-4 border-b border-border py-4 last:border-b-0"
                   >
-                    <div className="w-28 shrink-0 pt-2 text-sm font-semibold text-ink">
+                    <div className="w-20 shrink-0 pt-2 text-sm font-semibold text-ink sm:w-28">
                       {name}
                     </div>
 
@@ -140,7 +140,7 @@ export default function AvailabilityPage() {
                         dayRules.map(rule => (
                           <div
                             key={rule.id}
-                            className="flex items-center justify-between gap-3 rounded-md bg-primary-tint px-3 py-2"
+                            className="flex items-center justify-between gap-3 rounded-md border border-primary/15 bg-primary-tint px-3 py-2"
                           >
                             <div>
                               <p className="font-mono text-sm font-medium text-primary-hover">
